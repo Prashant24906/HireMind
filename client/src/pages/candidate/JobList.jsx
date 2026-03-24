@@ -4,15 +4,15 @@ import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 
 const domainBadge = {
-  webdev: 'bg-blue-100 text-blue-700',
-  data: 'bg-purple-100 text-purple-700',
-  general: 'bg-gray-100 text-gray-700',
+  webdev: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+  data: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
+  general: 'bg-white/5 text-white/70 border border-white/10',
 };
 
 const difficultyBadge = {
-  easy: 'bg-green-100 text-green-700',
-  medium: 'bg-yellow-100 text-yellow-700',
-  hard: 'bg-red-100 text-red-700',
+  easy: 'bg-green-500/10 text-green-400 border border-green-500/20',
+  medium: 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20',
+  hard: 'bg-red-500/10 text-red-400 border border-red-500/20',
 };
 
 export default function JobList() {
@@ -50,58 +50,59 @@ export default function JobList() {
   if (loading) return <Spinner text="Loading jobs..." />;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Open Positions</h1>
-        <p className="mt-1 text-gray-500">
+    <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
+      <div className="mb-10">
+        <h1 className="text-3xl font-medium text-white tracking-tight">Open Positions</h1>
+        <p className="mt-2 text-textSoft text-lg">
           Browse available roles and start an AI-powered interview.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+        <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl">
           {error}
         </div>
       )}
 
       {jobs.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-gray-200 rounded-xl">
-          <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center py-20 bg-surface border border-white/5 rounded-2xl">
+          <svg className="mx-auto h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <p className="mt-4 text-gray-500">No open positions available right now.</p>
+          <p className="mt-4 text-textSoft">No open positions available right now.</p>
         </div>
       ) : (
         <div className="grid gap-4">
           {jobs.map((job) => (
             <div
               key={job._id}
-              className="bg-white border border-gray-200 rounded-xl p-6 hover:border-indigo-200 transition-colors"
+              className="bg-surface border border-white/5 rounded-2xl p-6 hover:border-brand/40 transition-colors group flex flex-col md:flex-row md:items-start justify-between gap-6"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h2 className="text-lg font-semibold text-gray-900">{job.title}</h2>
-                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${domainBadge[job.domain]}`}>
-                      {job.domain}
-                    </span>
-                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${difficultyBadge[job.difficulty]}`}>
-                      {job.difficulty}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{job.description}</p>
-                  <p className="text-xs text-gray-400">
-                    Posted by {job.createdBy?.name || 'Unknown'}
-                  </p>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <h2 className="text-xl font-medium text-white group-hover:text-brand transition-colors">{job.title}</h2>
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${domainBadge[job.domain]}`}>
+                    {job.domain}
+                  </span>
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${difficultyBadge[job.difficulty]}`}>
+                    {job.difficulty}
+                  </span>
                 </div>
-                <button
-                  onClick={() => handleStartInterview(job._id)}
-                  disabled={starting === job._id}
-                  className="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-                >
-                  {starting === job._id ? 'Starting...' : 'Start Interview'}
-                </button>
+                <p className="text-sm text-textSoft mb-4 line-clamp-2 leading-relaxed">{job.description}</p>
+                <div className="flex items-center gap-2 text-xs text-white/40">
+                  <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
+                    {(job.createdBy?.name || 'U').charAt(0)}
+                  </div>
+                  <span>Posted by {job.createdBy?.name || 'Unknown'}</span>
+                </div>
               </div>
+              <button
+                onClick={() => handleStartInterview(job._id)}
+                disabled={starting === job._id}
+                className="shrink-0 w-full md:w-auto bg-white/10 hover:bg-brand hover:text-darker text-white text-sm font-medium px-6 py-3 rounded-xl transition-all disabled:opacity-50"
+              >
+                {starting === job._id ? 'Starting...' : 'Start Interview'}
+              </button>
             </div>
           ))}
         </div>

@@ -30,94 +30,97 @@ export default function JobResults() {
 
   if (loading) return <Spinner text="Loading results..." />;
 
-  if (error) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">{error}</div>
-      </div>
-    );
-  }
-
   const scoreColor = (s) =>
-    s >= 7 ? 'text-green-600' : s >= 5 ? 'text-yellow-600' : 'text-red-500';
+    s >= 7 ? 'text-green-400' : s >= 5 ? 'text-yellow-400' : 'text-red-400';
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
+    <div className="max-w-5xl mx-auto px-4 py-12 animate-fade-in-up">
+      <div className="mb-10">
         <Link
           to="/interviewer/dashboard"
-          className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+          className="text-sm text-brand hover:brightness-110 font-medium inline-flex items-center gap-2 transition-all group"
         >
-          ← Back to Dashboard
+          <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Dashboard
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 mt-2">
+        <h1 className="text-3xl font-medium text-white tracking-tight mt-6">
           {job?.title} — Candidate Results
         </h1>
-        <p className="mt-1 text-gray-500">
+        <p className="mt-2 text-textSoft text-lg">
           {candidates.length} completed interview{candidates.length !== 1 ? 's' : ''}
         </p>
       </div>
 
+      {error && (
+        <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl">
+          {error}
+        </div>
+      )}
+
       {candidates.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-gray-200 rounded-xl">
-          <svg className="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center py-24 bg-surface border border-white/5 rounded-2xl relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand/5 blur-3xl rounded-full"></div>
+          <svg className="mx-auto h-12 w-12 text-white/20 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          <p className="mt-4 text-gray-500">
+          <p className="mt-4 text-textSoft relative z-10">
             No candidates have completed interviews for this job yet.
           </p>
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Rank
-                </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Score
-                </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {candidates.map((c, idx) => (
-                <tr key={c.interviewId} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-500">
-                    #{idx + 1}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {c.candidateName}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {c.candidateEmail}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`text-sm font-bold ${scoreColor(c.totalScore)}`}>
-                      {c.totalScore !== null ? `${c.totalScore}/10` : 'N/A'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <Link
-                      to={`/result/${c.interviewId}`}
-                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
-                    >
-                      View Details
-                    </Link>
-                  </td>
+        <div className="bg-surface border border-white/10 rounded-2xl overflow-hidden shadow-2xl relative z-10">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-white/10 bg-darker/50 backdrop-blur-sm">
+                  <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
+                    Rank
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
+                    Score
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider text-right">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {candidates.map((c, idx) => (
+                  <tr key={c.interviewId} className="hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-5 text-sm font-medium text-textSoft">
+                      <span className="w-6 h-6 inline-flex items-center justify-center rounded-full bg-dark border border-white/10 text-white text-xs">
+                        {idx + 1}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-sm font-medium text-white">
+                      {c.candidateName}
+                    </td>
+                    <td className="px-6 py-5 text-sm text-textSoft">
+                      {c.candidateEmail}
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className={`text-sm font-bold px-2.5 py-1 rounded-full bg-dark border border-white/5 ${scoreColor(c.totalScore)}`}>
+                        {c.totalScore !== null ? `${c.totalScore}/10` : 'N/A'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <Link
+                        to={`/result/${c.interviewId}`}
+                        className="text-sm text-brand hover:brightness-110 font-medium px-4 py-2 rounded-lg bg-brand/10 hover:bg-brand/20 transition-all"
+                      >
+                        View Details
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

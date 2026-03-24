@@ -33,24 +33,27 @@ export default function CreateJob() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Post a New Job</h1>
-        <p className="mt-1 text-gray-500">
+    <div className="max-w-2xl mx-auto px-4 py-12 animate-fade-in-up">
+      <div className="mb-10">
+        <h1 className="text-3xl font-medium text-white tracking-tight">Post a New Job</h1>
+        <p className="mt-2 text-textSoft text-lg">
           Create a job listing and candidates will be able to take AI interviews for it.
         </p>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-8">
+      <div className="bg-surface border border-white/5 rounded-2xl p-8 relative overflow-hidden">
+        {/* Subtle glow effect */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 blur-3xl rounded-full"></div>
+
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
           <div>
-            <label htmlFor="job-title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="job-title" className="block text-sm font-medium text-textSoft mb-2">
               Job Title
             </label>
             <input
@@ -60,13 +63,13 @@ export default function CreateJob() {
               value={form.title}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
               placeholder="e.g. Full Stack Developer"
             />
           </div>
 
           <div>
-            <label htmlFor="job-description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="job-description" className="block text-sm font-medium text-textSoft mb-2">
               Description
             </label>
             <textarea
@@ -76,14 +79,14 @@ export default function CreateJob() {
               onChange={handleChange}
               required
               rows={4}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition resize-none"
+              className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all resize-none"
               placeholder="Describe the role, responsibilities, and requirements..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             <div>
-              <label htmlFor="job-domain" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="job-domain" className="block text-sm font-medium text-textSoft mb-2">
                 Domain
               </label>
               <select
@@ -91,7 +94,7 @@ export default function CreateJob() {
                 name="domain"
                 value={form.domain}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white"
+                className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all appearance-none"
               >
                 <option value="webdev">Web Development</option>
                 <option value="data">Data Science</option>
@@ -100,7 +103,7 @@ export default function CreateJob() {
             </div>
 
             <div>
-              <label htmlFor="job-difficulty" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="job-difficulty" className="block text-sm font-medium text-textSoft mb-2">
                 Difficulty
               </label>
               <select
@@ -108,7 +111,7 @@ export default function CreateJob() {
                 name="difficulty"
                 value={form.difficulty}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white"
+                className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all appearance-none"
               >
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -117,17 +120,17 @@ export default function CreateJob() {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-4 pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+              className="bg-brand hover:brightness-110 text-darker font-medium px-8 py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(198,244,50,0.2)] hover:shadow-[0_0_25px_rgba(198,244,50,0.4)]"
             >
               {loading ? 'Creating...' : 'Create Job'}
             </button>
             <Link
               to="/interviewer/dashboard"
-              className="bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-2.5 rounded-lg border border-gray-300 transition-colors"
+              className="bg-white/5 hover:bg-white/10 text-white font-medium px-8 py-3 rounded-xl border border-white/10 transition-all hover:border-white/20"
             >
               Cancel
             </Link>

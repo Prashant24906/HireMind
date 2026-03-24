@@ -29,102 +29,85 @@ export default function InterviewResult() {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">{error}</div>
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl">{error}</div>
       </div>
     );
   }
 
   if (!result) return null;
 
-  const scoreColor =
-    result.totalScore >= 7
-      ? 'text-green-600'
-      : result.totalScore >= 5
-      ? 'text-yellow-600'
-      : 'text-red-500';
-
-  const scoreBg =
-    result.totalScore >= 7
-      ? 'bg-green-50 border-green-200'
-      : result.totalScore >= 5
-      ? 'bg-yellow-50 border-yellow-200'
-      : 'bg-red-50 border-red-200';
+  const scoreColor = result.totalScore >= 7 ? 'text-green-400' : result.totalScore >= 5 ? 'text-yellow-400' : 'text-red-400';
+  const scoreBg = result.totalScore >= 7 ? 'bg-green-500/5 border-green-500/20 shadow-[0_0_30px_rgba(74,222,128,0.1)]' 
+               : result.totalScore >= 5 ? 'bg-yellow-500/5 border-yellow-500/20' 
+               : 'bg-red-500/5 border-red-500/20';
 
   const performanceLabel =
-    result.totalScore >= 8
-      ? 'Excellent'
-      : result.totalScore >= 7
-      ? 'Good'
-      : result.totalScore >= 5
-      ? 'Average'
-      : result.totalScore >= 3
-      ? 'Below Average'
+    result.totalScore >= 8 ? 'Excellent'
+      : result.totalScore >= 7 ? 'Good'
+      : result.totalScore >= 5 ? 'Average'
+      : result.totalScore >= 3 ? 'Below Average'
       : 'Needs Improvement';
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Interview Results</h1>
-        <p className="mt-1 text-gray-500">{result.jobTitle}</p>
+    <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
+      <div className="mb-10 text-center">
+        <h1 className="text-3xl font-medium text-white tracking-tight">Interview Results</h1>
+        <p className="mt-2 text-textSoft text-lg">{result.jobTitle}</p>
       </div>
 
       {/* Total score card */}
-      <div className={`border rounded-xl p-8 mb-8 text-center ${scoreBg}`}>
-        <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">
+      <div className={`border rounded-2xl p-10 mb-12 text-center transition-all ${scoreBg}`}>
+        <p className="text-sm font-mono text-textSoft uppercase tracking-widest mb-4">
           Overall Score
         </p>
-        <p className={`text-6xl font-bold ${scoreColor}`}>
+        <p className={`text-7xl font-semibold tracking-tight ${scoreColor}`}>
           {result.totalScore !== null ? result.totalScore : 'N/A'}
-          <span className="text-2xl text-gray-400">/10</span>
+          <span className="text-3xl text-white/30 font-medium">/10</span>
         </p>
-        <p className={`mt-2 text-lg font-semibold ${scoreColor}`}>
+        <p className={`mt-4 text-xl font-medium ${scoreColor}`}>
           {result.totalScore !== null ? performanceLabel : 'Pending'}
         </p>
         {result.status === 'in_progress' && (
-          <p className="mt-2 text-sm text-amber-600">
+          <p className="mt-4 text-sm font-medium px-4 py-2 bg-yellow-500/10 text-yellow-400 rounded-full inline-block">
             This interview is still in progress.
           </p>
         )}
       </div>
 
       {/* Per-question results */}
-      <div className="space-y-4 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900">Question Breakdown</h2>
+      <div className="space-y-6 mb-12">
+        <h2 className="text-xl font-medium text-white mb-6">Question Breakdown</h2>
 
         {result.questions.map((q, idx) => (
           <div
             key={q.questionId || idx}
-            className="bg-white border border-gray-200 rounded-xl overflow-hidden"
+            className="bg-surface border border-white/10 rounded-2xl overflow-hidden transition-all hover:border-white/20"
           >
             <button
               onClick={() => setExpandedQ(expandedQ === idx ? null : idx)}
-              className="w-full text-left px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              className="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-white/5 transition-colors"
             >
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-gray-500">
-                  {q.isFollowUp ? '↳ Follow-up' : `Q${idx + 1}`}
+              <div className="flex items-center gap-4">
+                <span className="w-8 h-8 shrink-0 flex items-center justify-center bg-dark border border-white/10 rounded-full text-xs font-mono text-textSoft">
+                  {q.isFollowUp ? '↳' : `Q${idx + 1}`}
                 </span>
-                <span className="text-sm text-gray-800 line-clamp-1 flex-1">
+                <span className="text-base font-medium text-white line-clamp-1 flex-1">
                   {q.text}
                 </span>
               </div>
-              <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-4 shrink-0 px-2">
                 <span
-                  className={`text-sm font-bold ${
+                  className={`text-base font-semibold px-3 py-1 rounded-full bg-dark border border-white/5 ${
                     q.score !== null
-                      ? q.score >= 7
-                        ? 'text-green-600'
-                        : q.score >= 5
-                        ? 'text-yellow-600'
-                        : 'text-red-500'
-                      : 'text-gray-400'
+                      ? q.score >= 7 ? 'text-green-400' : q.score >= 5 ? 'text-yellow-400' : 'text-red-400'
+                      : 'text-textSoft'
                   }`}
                 >
                   {q.score !== null ? `${q.score}/10` : 'N/A'}
                 </span>
                 <svg
-                  className={`w-5 h-5 text-gray-400 transition-transform ${
+                  className={`w-5 h-5 text-white/40 transition-transform ${
                     expandedQ === idx ? 'rotate-180' : ''
                   }`}
                   fill="none"
@@ -137,20 +120,20 @@ export default function InterviewResult() {
             </button>
 
             {expandedQ === idx && (
-              <div className="px-6 pb-6 border-t border-gray-100 pt-4 space-y-4">
+              <div className="px-6 pb-6 border-t border-white/5 pt-6 space-y-6">
                 {/* User answer */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-xs font-medium text-gray-400 uppercase mb-1">
+                <div className="bg-dark/50 rounded-xl p-5 border border-white/5">
+                  <p className="text-xs font-mono text-textSoft uppercase tracking-wider mb-3">
                     Your Answer
                   </p>
-                  <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                  <p className="text-sm text-white/90 leading-relaxed whitespace-pre-wrap">
                     {q.answer || 'No answer provided'}
                   </p>
                 </div>
 
                 {/* Score breakdown */}
                 {q.breakdown && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <ScoreBar label="Accuracy" score={q.breakdown.accuracy} />
                     <ScoreBar label="Depth" score={q.breakdown.depth} />
                     <ScoreBar label="Clarity" score={q.breakdown.clarity} />
@@ -161,9 +144,9 @@ export default function InterviewResult() {
 
                 {/* AI feedback */}
                 {q.reason && (
-                  <div className="bg-indigo-50 rounded-lg p-4">
-                    <p className="text-sm text-indigo-700">
-                      <span className="font-semibold">AI Feedback: </span>
+                  <div className="bg-brand/5 border border-brand/10 rounded-xl p-5">
+                    <p className="text-sm text-white/90 leading-relaxed">
+                      <span className="font-semibold text-brand tracking-wide mr-2">AI Feedback:</span>
                       {q.reason}
                     </p>
                   </div>
@@ -175,16 +158,16 @@ export default function InterviewResult() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row justify-center gap-4">
         <Link
           to="/jobs"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-center"
+          className="bg-brand hover:brightness-110 text-darker font-medium px-8 py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(198,244,50,0.15)] text-center"
         >
           Browse More Jobs
         </Link>
         <Link
           to="/dashboard"
-          className="bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-2.5 rounded-lg border border-gray-300 transition-colors text-center"
+          className="bg-surface hover:bg-white/5 text-white border border-white/10 font-medium px-8 py-3 rounded-xl transition-all text-center"
         >
           Go to Dashboard
         </Link>

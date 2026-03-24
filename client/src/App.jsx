@@ -1,7 +1,9 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import useAuthStore from './store/authStore';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+
+import HomePage from './pages/home/HomePage';
 
 // Auth pages
 import Login from './pages/Login';
@@ -35,10 +37,12 @@ function RoleRedirect() {
 
 export default function App() {
   const { user } = useAuthStore();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {user && <Navbar />}
+    <div className="min-h-screen bg-darker text-white">
+      {user && !isHomePage && <Navbar />}
 
       <Routes>
         {/* Public routes */}
@@ -115,8 +119,8 @@ export default function App() {
           }
         />
 
-        {/* Root redirect */}
-        <Route path="/" element={<RoleRedirect />} />
+        {/* Landing/Home Page */}
+        <Route path="/" element={<HomePage />} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />

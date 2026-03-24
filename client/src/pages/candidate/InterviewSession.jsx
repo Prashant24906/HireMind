@@ -28,7 +28,6 @@ export default function InterviewSession() {
   const [timeLeft, setTimeLeft] = useState(120);
   const timerRef = useRef(null);
 
-  // Fetch interview data
   useEffect(() => {
     const fetchInterview = async () => {
       try {
@@ -39,7 +38,6 @@ export default function InterviewSession() {
         }
         setInterview(data.interview);
 
-        // Find first unanswered question
         const firstUnanswered = data.interview.questions.findIndex(
           (q) => !q.answerText
         );
@@ -53,7 +51,6 @@ export default function InterviewSession() {
     fetchInterview();
   }, [interviewId, navigate]);
 
-  // Timer logic
   const handleAutoSubmit = useCallback(() => {
     if (!submitting && answer.trim()) {
       handleSubmit();
@@ -79,7 +76,6 @@ export default function InterviewSession() {
     };
   }, [currentIdx]);
 
-  // Auto-submit when timer reaches 0
   useEffect(() => {
     if (timeLeft === 0 && !result) {
       handleAutoSubmit();
@@ -88,7 +84,6 @@ export default function InterviewSession() {
 
   const handleSubmit = async () => {
     if (!answer.trim() || submitting) return;
-
     setSubmitting(true);
     setError('');
 
@@ -103,7 +98,6 @@ export default function InterviewSession() {
       setResult(data);
       if (timerRef.current) clearInterval(timerRef.current);
 
-      // Handle follow-up
       if (data.followUp) {
         setFollowUpQuestion(data.followUp);
       }
@@ -119,7 +113,6 @@ export default function InterviewSession() {
     setSubmittingFollowUp(true);
 
     try {
-      // Re-fetch interview to get the follow-up question's ID
       const { data: ivData } = await api.get(`/interview/${interviewId}`);
       const fuQ = ivData.interview.questions.find(
         (q) => q.isFollowUp && !q.answerText
@@ -141,7 +134,6 @@ export default function InterviewSession() {
   };
 
   const handleNext = async () => {
-    // Re-fetch the interview to get latest state (including any added follow-ups)
     try {
       const { data } = await api.get(`/interview/${interviewId}`);
       if (data.interview.status === 'completed') {
@@ -150,7 +142,6 @@ export default function InterviewSession() {
       }
       setInterview(data.interview);
 
-      // Find next unanswered
       const nextUnanswered = data.interview.questions.findIndex(
         (q) => !q.answerText
       );
@@ -161,7 +152,6 @@ export default function InterviewSession() {
         return;
       }
     } catch (err) {
-      // If we can't refetch, just advance locally
       if (currentIdx < interview.questions.length - 1) {
         setCurrentIdx(currentIdx + 1);
       } else {
@@ -170,7 +160,6 @@ export default function InterviewSession() {
       }
     }
 
-    // Reset state
     setAnswer('');
     setResult(null);
     setFollowUpQuestion('');
@@ -182,8 +171,8 @@ export default function InterviewSession() {
 
   if (error && !interview) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">{error}</div>
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl">{error}</div>
       </div>
     );
   }
@@ -197,7 +186,7 @@ export default function InterviewSession() {
     .filter((q) => !q.isFollowUp).length;
 
   const progressPct = (questionNumber / totalQuestions) * 100;
-  const timerColor = timeLeft <= 30 ? 'text-red-500' : 'text-gray-600';
+  const timerColor = timeLeft <= 30 ? 'text-red-400 font-bold' : 'text-brand';
 
   const formatTime = (s) => {
     const m = Math.floor(s / 60);
@@ -205,90 +194,98 @@ export default function InterviewSession() {
     return `${m}:${sec.toString().padStart(2, '0')}`;
   };
 
-  const scoreColor = (s) =>
-    s >= 7 ? 'text-green-600' : s >= 5 ? 'text-yellow-600' : 'text-red-500';
+  const scoreColor = (s) => s >= 7 ? 'text-green-400' : s >= 5 ? 'text-yellow-400' : 'text-red-400';
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">
-            Question {questionNumber} of {totalQuestions}
+          <h1 className="text-xl font-medium text-white tracking-tight">
+            Question <span className="text-brand">{questionNumber}</span> of {totalQuestions}
           </h1>
           {question?.isFollowUp && (
-            <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+            <span className="mt-2 inline-block text-xs font-medium text-amber-400 border border-amber-400/20 bg-amber-400/10 px-3 py-1 rounded-full">
               Follow-up Question
             </span>
           )}
         </div>
-        <div className={`text-2xl font-mono font-bold ${timerColor}`}>
+        <div className={`text-3xl font-mono tracking-wider ${timerColor} drop-shadow-[0_0_10px_rgba(198,244,50,0.3)]`}>
           {formatTime(timeLeft)}
         </div>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
+      <div className="w-full bg-dark border border-white/5 rounded-full h-2 mb-10 overflow-hidden">
         <div
-          className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+          className="bg-brand h-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(198,244,50,0.8)]"
           style={{ width: `${progressPct}%` }}
         ></div>
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl">
           {error}
         </div>
       )}
 
       {/* Question card */}
-      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-        <p className="text-gray-800 text-lg leading-relaxed">
-          {question?.questionText}
-        </p>
+      <div className="bg-surface border border-white/10 rounded-2xl p-8 mb-8 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
+        <div className="flex gap-4">
+          <div className="w-8 h-8 rounded-full bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0 mt-1">
+             <span className="text-brand font-mono text-sm">Q</span>
+          </div>
+          <p className="text-white/90 text-xl leading-relaxed font-medium relative z-10">
+            {question?.questionText}
+          </p>
+        </div>
       </div>
 
       {/* Answer area (not yet submitted) */}
       {!result && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="relative">
             <textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               rows={6}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition resize-none"
-              placeholder="Type your answer here..."
+              className="w-full bg-dark border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-white/20 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all resize-none leading-relaxed"
+              placeholder="Type your answer here. Be specific and structured..."
             />
-            <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-              {answer.length} characters
+            <div className={`absolute bottom-4 right-4 text-xs font-mono ${answer.length > 50 ? 'text-brand/70' : 'text-white/20'}`}>
+              {answer.length} chars
             </div>
           </div>
 
-          <button
-            onClick={handleSubmit}
-            disabled={!answer.trim() || submitting}
-            className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {submitting ? 'Submitting...' : 'Submit Answer'}
-          </button>
+          <div className="flex justify-end">
+            <button
+              onClick={handleSubmit}
+              disabled={!answer.trim() || submitting}
+              className="w-full sm:w-auto bg-brand hover:brightness-110 text-darker font-medium px-10 py-3.5 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(198,244,50,0.15)]"
+            >
+              {submitting ? 'Submitting...' : 'Submit Answer'}
+            </button>
+          </div>
         </div>
       )}
 
       {/* Result display */}
       {result && (
-        <div className="space-y-6">
-          {/* Score */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-sm font-medium text-gray-500">Score:</span>
-              <span className={`text-3xl font-bold ${result.score !== null ? scoreColor(result.score) : 'text-gray-400'}`}>
-                {result.score !== null ? `${result.score}/10` : 'N/A'}
+        <div className="space-y-8 animate-fade-in-up">
+          {/* Main Score Card */}
+          <div className="bg-surface border border-white/10 rounded-2xl p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-brand/5 blur-[80px] rounded-full pointer-events-none"></div>
+            
+            <div className="flex items-center justify-between border-b border-white/5 pb-6 mb-6">
+              <span className="text-sm font-mono text-textSoft uppercase tracking-widest">Score Breakdown</span>
+              <span className={`text-4xl font-semibold tracking-tight ${result.score !== null ? scoreColor(result.score) : 'text-textSoft'}`}>
+                {result.score !== null ? `${result.score}` : 'N/A'}<span className="text-xl text-white/20">/10</span>
               </span>
             </div>
 
-            {/* Breakdown grid */}
             {result.breakdown && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <ScoreBar label="Accuracy" score={result.breakdown.accuracy} />
                 <ScoreBar label="Depth" score={result.breakdown.depth} />
                 <ScoreBar label="Clarity" score={result.breakdown.clarity} />
@@ -297,11 +294,10 @@ export default function InterviewSession() {
               </div>
             )}
 
-            {/* AI Feedback */}
             {result.reason && (
-              <div className="bg-gray-50 rounded-lg p-4 mt-4">
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold text-gray-700">AI Feedback: </span>
+              <div className="bg-dark/50 border border-white/5 rounded-xl p-5 mt-2">
+                <p className="text-sm text-white/80 leading-relaxed">
+                  <span className="font-semibold text-brand tracking-wide mr-2">AI Feedback:</span>
                   {result.reason}
                 </p>
               </div>
@@ -310,52 +306,67 @@ export default function InterviewSession() {
 
           {/* Follow-up question */}
           {followUpQuestion && !followUpResult && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-amber-800 mb-2">
-                Follow-up Question
-              </h3>
-              <p className="text-gray-800 mb-4">{followUpQuestion}</p>
+            <div className="bg-surface border border-amber-500/20 rounded-2xl p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-3xl rounded-full pointer-events-none"></div>
+              
+              <div className="flex gap-4 mb-6 relative z-10">
+                <div className="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-1">
+                   <span className="text-amber-400 font-mono text-sm">↳</span>
+                </div>
+                <div>
+                   <h3 className="text-sm font-semibold text-amber-400 mb-2 mt-1 uppercase tracking-wider">Follow-up</h3>
+                   <p className="text-white/90 text-lg leading-relaxed font-medium">{followUpQuestion}</p>
+                </div>
+              </div>
+
               <textarea
                 value={followUpAnswer}
                 onChange={(e) => setFollowUpAnswer(e.target.value)}
-                rows={4}
-                className="w-full border border-amber-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition resize-none mb-3"
+                rows={5}
+                className="w-full bg-dark border border-amber-500/20 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 outline-none transition-all resize-none mb-4 relative z-10"
                 placeholder="Type your follow-up answer..."
               />
-              <button
-                onClick={handleFollowUpSubmit}
-                disabled={!followUpAnswer.trim() || submittingFollowUp}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
-              >
-                {submittingFollowUp ? 'Submitting...' : 'Submit Follow-up'}
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={handleFollowUpSubmit}
+                  disabled={!followUpAnswer.trim() || submittingFollowUp}
+                  className="bg-amber-500 hover:brightness-110 text-darker font-medium px-8 py-3 rounded-xl transition-all disabled:opacity-50 relative z-10"
+                >
+                  {submittingFollowUp ? 'Submitting...' : 'Submit Follow-up'}
+                </button>
+              </div>
             </div>
           )}
 
           {/* Follow-up result */}
           {followUpResult && (
-            <div className="bg-white border border-gray-200 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">
-                Follow-up Score
-              </h3>
-              <span className={`text-2xl font-bold ${followUpResult.score !== null ? scoreColor(followUpResult.score) : 'text-gray-400'}`}>
-                {followUpResult.score !== null ? `${followUpResult.score}/10` : 'N/A'}
-              </span>
+            <div className="bg-surface border border-white/10 rounded-2xl p-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-mono text-textSoft uppercase tracking-widest">Follow-up Score</h3>
+                <span className={`text-3xl font-semibold tracking-tight ${followUpResult.score !== null ? scoreColor(followUpResult.score) : 'text-textSoft'}`}>
+                  {followUpResult.score !== null ? `${followUpResult.score}` : 'N/A'}<span className="text-lg text-white/20">/10</span>
+                </span>
+              </div>
               {followUpResult.reason && (
-                <p className="mt-2 text-sm text-gray-600">{followUpResult.reason}</p>
+                <p className="text-sm text-white/80 leading-relaxed bg-dark/50 border border-white/5 rounded-xl p-5">
+                  <span className="font-semibold text-amber-400 tracking-wide mr-2">Feedback:</span>
+                  {followUpResult.reason}
+                </p>
               )}
             </div>
           )}
 
           {/* Next button */}
-          <button
-            onClick={handleNext}
-            className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-2.5 rounded-lg transition-colors"
-          >
-            {currentIdx < interview.questions.length - 1 || followUpQuestion
-              ? 'Next Question →'
-              : 'View Results →'}
-          </button>
+          <div className="flex justify-end pt-4">
+            <button
+              onClick={handleNext}
+              className="w-full sm:w-auto bg-white text-darker hover:bg-white/90 font-medium px-10 py-3.5 rounded-xl transition-all"
+            >
+              {currentIdx < interview.questions.length - 1 || followUpQuestion
+                ? 'Next Question →'
+                : 'View Final Results →'}
+            </button>
+          </div>
         </div>
       )}
     </div>
