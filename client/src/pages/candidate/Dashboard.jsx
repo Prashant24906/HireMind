@@ -36,7 +36,12 @@ export default function CandidateDashboard() {
         </Link>
 
         {/* Interviews Card */}
-        <div className="bg-surface border border-white/10 rounded-2xl p-8 relative overflow-hidden">
+        
+
+        <Link
+          to="/YourInterviews"
+          className="group bg-surface border border-white/10 rounded-2xl p-8 hover:border-brand/40 transition-all block relative overflow-hidden"
+          >
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl"></div>
           <div className="w-14 h-14 bg-dark border border-white/10 rounded-xl flex items-center justify-center mb-6">
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +52,7 @@ export default function CandidateDashboard() {
           <p className="text-sm text-textSoft relative z-10">
             Track your interview progress and review past results.
           </p>
-        </div>
+          </Link>
       </div>
 
       {/* Tips Section */}

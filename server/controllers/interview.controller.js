@@ -287,4 +287,17 @@ const getInterview = async (req, res) => {
   }
 };
 
-module.exports = { startInterview, submitAnswer, getInterview };
+// @desc    Get all interviews for current candidate
+// @route   GET /api/interview/my-interviews
+const getCandidateInterviews = async (req, res) => {
+  try {
+    const interviews = await Interview.find({ candidateId: req.user._id })
+      .populate('jobId', 'title domain difficulty')
+      .sort('-createdAt');
+    res.json({ interviews });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error fetching your interviews' });
+  }
+};
+
+module.exports = { startInterview, submitAnswer, getInterview, getCandidateInterviews };

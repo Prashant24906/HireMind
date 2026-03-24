@@ -12,6 +12,7 @@ import Register from './pages/Register';
 // Candidate pages
 import CandidateDashboard from './pages/candidate/Dashboard';
 import JobList from './pages/candidate/JobList';
+import YourInterviews from './pages/candidate/YourInterviews';
 import InterviewSession from './pages/candidate/InterviewSession';
 import InterviewResult from './pages/candidate/InterviewResult';
 
@@ -63,6 +64,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
               <JobList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/YourInterviews"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <YourInterviews />
             </ProtectedRoute>
           }
         />
