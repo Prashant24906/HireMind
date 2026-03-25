@@ -7,7 +7,7 @@ export default function CTASection() {
   const dashboardLink = user?.role === 'interviewer' ? '/interviewer/dashboard' : '/dashboard';
 
   return (
-    <section className="py-32 px-6 bg-surface/50 border-t border-b border-white/5 mt-12 text-center text-white relative">
+    <section id='about' className="py-32 px-6 bg-surface/50 border-t border-b border-white/5 mt-12 text-center text-white relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand/5 blur-[100px] rounded-full pointer-events-none" />
       <h2 className="text-3xl md:text-5xl font-medium mb-8 relative z-10">
         Ready to operationalize your hiring goals?
