@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function TestimonialSection() {
   return (
-    <section className="py-24 px-6 max-w-7xl mx-auto border-t border-white/5 mt-12">
+    <section id='careers' className="py-24 px-6 max-w-7xl mx-auto border-t border-white/5 mt-12">
       <div className="flex flex-col md:flex-row gap-16 justify-between items-start">
         <h2 className="text-3xl md:text-5xl font-medium text-white max-w-lg leading-tight">
           Why TechCorp chose HireMind

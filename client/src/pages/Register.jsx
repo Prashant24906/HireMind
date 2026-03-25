@@ -86,7 +86,7 @@ export default function Register() {
                 onChange={handleChange}
                 required
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="John Doe"
+                placeholder="Enter your full name"
               />
             </div>
 
