@@ -98,7 +98,11 @@ export default function CreateJob() {
               >
                 <option value="webdev">Web Development</option>
                 <option value="data">Data Science</option>
-                <option value="general">General</option>
+                <option value="cybsec">Cybersecurity</option>
+                <option value="sysdes">System Design</option>
+                <option value="devops">DevOps</option>
+                <option value="prodman">Product Manager</option>
+                <option value="uiux">UI/UX Design</option>
               </select>
             </div>
 
