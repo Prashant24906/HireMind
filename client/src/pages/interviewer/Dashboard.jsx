@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 
@@ -21,6 +22,19 @@ export default function InterviewerDashboard() {
     };
     fetchJobs();
   }, []);
+
+  const handleDelete = async (jobId) => {
+    if (!window.confirm('Are you sure you want to delete this job posting? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await api.delete(`/jobs/${jobId}`);
+      setJobs(jobs.filter(j => j._id !== jobId));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete job');
+    }
+  };
 
   if (loading) return <Spinner text="Loading your jobs..." />;
 
@@ -90,12 +104,21 @@ export default function InterviewerDashboard() {
                   {job.description}
                 </p>
               </div>
-              <Link
-                to={`/interviewer/job/${job._id}/results`}
-                className="shrink-0 text-sm font-medium text-white/70 hover:text-brand bg-white/5 hover:bg-brand/10 px-5 py-2.5 rounded-xl transition-all whitespace-nowrap"
-              >
-                View Results →
-              </Link>
+              <div className="shrink-0 flex items-center gap-3">
+                <Link
+                  to={`/interviewer/job/${job._id}/results`}
+                  className="text-sm font-medium text-white/70 hover:text-brand bg-white/5 hover:bg-brand/10 px-5 py-2.5 rounded-xl transition-all whitespace-nowrap"
+                >
+                  View Results →
+                </Link>
+                <button
+                  onClick={() => handleDelete(job._id)}
+                  className="p-2.5 text-white/30 hover:text-red-400 bg-white/5 hover:bg-red-500/10 rounded-xl transition-all"
+                  title="Delete Job"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
             </div>
           ))}
         </div>

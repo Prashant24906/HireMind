@@ -36,7 +36,9 @@ const QUESTION_BANK = {
 
 // Shuffle array and pick first `count` items
 function pickQuestions(domain, count = 5) {
-  const pool = [...QUESTION_BANK[domain]];
+  // Safe fallback if domain doesn't exist in the hardcoded bank (e.g. for new domains)
+  const sourceBank = QUESTION_BANK[domain] || QUESTION_BANK.general;
+  const pool = [...sourceBank];
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -84,16 +86,50 @@ const startInterview = [
         const questions = existing.questions.map((q) => ({
           _id: q.questionId,
           text: q.questionText,
+          type: q.type,
+          options: q.options,
         }));
         return res.json({ interviewId: existing._id, questions });
       }
 
-      // Pick 5 random questions from the domain bank
-      const picked = pickQuestions(job.domain, 5);
+      // ATTEMPT AI QUESTION GENERATION (from the new ml service)
+      let picked = [];
+      try {
+        const aiResponse = await axios.post(
+          `${process.env.AI_SERVICE_URL}/generate-questions`,
+          {
+            job_title: job.title,
+            skills: [], // Can be extracted from description if needed
+            difficulty: job.difficulty || 'medium',
+          },
+          { timeout: 15000 }
+        );
+        
+        // Extract full question objects returned (MCQ+Theory)
+        if (aiResponse.data.questions && aiResponse.data.questions.length > 0) {
+          picked = aiResponse.data.questions;
+        }
+      } catch (aiError) {
+        console.warn('AI Question generation failed, falling back to bank:', aiError.message);
+      }
 
-      const questionsForDB = picked.map((text) => ({
+      // Fallback to internal bank if AI fails or returns empty
+      if (picked.length === 0) {
+        const fallbackRaw = pickQuestions(job.domain, 5);
+        picked = fallbackRaw.map(text => ({
+          type: 'theory',
+          question: text,
+          options: [],
+          correct_answer: null
+        }));
+      }
+
+      const questionsForDB = picked.map((qObj) => ({
         questionId: simpleId(),
-        questionText: text,
+        questionText: qObj.question,
+        type: qObj.type || 'theory',
+        options: qObj.options || [],
+        correctAnswer: qObj.correct_answer || null,
         answerText: '',
         score: null,
         breakdown: null,
@@ -111,6 +147,8 @@ const startInterview = [
       const questions = interview.questions.map((q) => ({
         _id: q.questionId,
         text: q.questionText,
+        type: q.type,
+        options: q.options,
       }));
 
       res.status(201).json({ interviewId: interview._id, questions });
@@ -164,29 +202,44 @@ const submitAnswer = [
       // Get the job for domain/difficulty info
       const job = await Job.findById(interview.jobId);
 
-      // Call ML scoring service
+      // Call ML scoring service or score locally if MCQ
       let score = null;
       let breakdown = null;
       let reason = 'Scoring service unavailable';
 
-      try {
-        const mlResponse = await axios.post(
-          `${process.env.AI_SERVICE_URL}/score`,
-          {
-            question: question.questionText,
-            answer: answerText,
-            domain: job ? job.domain : 'general',
-            difficulty: job ? job.difficulty : 'medium',
-          },
-          { timeout: 15000 }
-        );
+      if (question.type === 'mcq') {
+        const isCorrect = answerText.trim().toUpperCase() === (question.correctAnswer || '').toUpperCase();
+        score = isCorrect ? 10 : 0;
+        breakdown = {
+          accuracy: isCorrect ? 10 : 0,
+          depth: isCorrect ? 10 : 0,
+          clarity: isCorrect ? 10 : 0,
+          application: isCorrect ? 10 : 0,
+          critical: isCorrect ? 10 : 0,
+        };
+        reason = isCorrect 
+          ? 'Correct answer selected. Great job!' 
+          : `Incorrect answer. The correct option was ${question.correctAnswer || 'not provided'}.`;
+      } else {
+        try {
+          const mlResponse = await axios.post(
+            `${process.env.AI_SERVICE_URL}/score`,
+            {
+              question: question.questionText,
+              answer: answerText,
+              domain: job ? job.domain : 'general',
+              difficulty: job ? job.difficulty : 'medium',
+            },
+            { timeout: 15000 }
+          );
 
-        score = mlResponse.data.score;
-        breakdown = mlResponse.data.breakdown;
-        reason = mlResponse.data.reason;
-      } catch (mlError) {
-        console.warn('ML scoring service unavailable:', mlError.message);
-        // Continue gracefully with null score
+          score = mlResponse.data.score;
+          breakdown = mlResponse.data.breakdown;
+          reason = mlResponse.data.reason;
+        } catch (mlError) {
+          console.warn('ML scoring service unavailable:', mlError.message);
+          // Continue gracefully with null score
+        }
       }
 
       // Save answer
@@ -214,9 +267,9 @@ const submitAnswer = [
 
       await interview.save();
 
-      // If score < 5, try to get follow-up question
+      // If score < 5, try to get follow-up question (only for theory)
       let followUp = null;
-      if (score !== null && score < 5) {
+      if (question.type !== 'mcq' && score !== null && score < 5) {
         try {
           const fuResponse = await axios.post(
             `${process.env.AI_SERVICE_URL}/followup`,

@@ -245,18 +245,46 @@ export default function InterviewSession() {
       {/* Answer area (not yet submitted) */}
       {!result && (
         <div className="space-y-6">
-          <div className="relative">
-            <textarea
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              rows={6}
-              className="w-full bg-dark border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-white/20 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all resize-none leading-relaxed"
-              placeholder="Type your answer here. Be specific and structured..."
-            />
-            <div className={`absolute bottom-4 right-4 text-xs font-mono ${answer.length > 50 ? 'text-brand/70' : 'text-white/20'}`}>
-              {answer.length} chars
+          {question?.type === 'mcq' ? (
+            <div className="grid grid-cols-1 gap-3">
+              {question.options?.map((opt, i) => {
+                const optionLabel = opt.substring(0, 1); // e.g., 'A'
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setAnswer(optionLabel)}
+                    className={`flex items-start gap-4 p-5 rounded-2xl text-left border transition-all ${
+                      answer === optionLabel
+                        ? 'bg-brand/10 border-brand/50 text-white'
+                        : 'bg-dark border-white/10 text-white/70 hover:bg-white/5 hover:border-white/20'
+                    }`}
+                  >
+                    <div className={`shrink-0 w-6 h-6 rounded-full border flex items-center justify-center mt-0.5 ${
+                      answer === optionLabel
+                        ? 'border-brand bg-brand'
+                        : 'border-white/20'
+                    }`}>
+                      {answer === optionLabel && <div className="w-2 h-2 rounded-full bg-darker"></div>}
+                    </div>
+                    <span className="leading-relaxed">{opt}</span>
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          ) : (
+            <div className="relative">
+              <textarea
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                rows={6}
+                className="w-full bg-dark border border-white/10 rounded-2xl px-5 py-4 text-white placeholder-white/20 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all resize-none leading-relaxed"
+                placeholder="Type your answer here. Be specific and structured..."
+              />
+              <div className={`absolute bottom-4 right-4 text-xs font-mono ${answer.length > 50 ? 'text-brand/70' : 'text-white/20'}`}>
+                {answer.length} chars
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end">
             <button

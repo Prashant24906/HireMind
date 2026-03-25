@@ -4,6 +4,9 @@ const answerSchema = new mongoose.Schema(
   {
     questionId: { type: String },
     questionText: { type: String },
+    type: { type: String, enum: ['theory', 'mcq'], default: 'theory' },
+    options: [{ type: String }],
+    correctAnswer: { type: String, default: null },
     answerText: { type: String, default: '' },
     score: { type: Number, default: null },
     breakdown: { type: Object, default: null },

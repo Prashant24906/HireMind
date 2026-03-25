@@ -7,8 +7,12 @@ const createJob = [
   body('title').trim().notEmpty().withMessage('Title is required'),
   body('description').trim().notEmpty().withMessage('Description is required'),
   body('domain')
-    .isIn(['webdev', 'data', 'general'])
-    .withMessage('Domain must be webdev, data, or general'),
+    .isIn([
+      'webdev', 'data', 'general', 'mlai', 'devops', 'cloud', 
+      'frontend', 'backend', 'fullstack', 'mobile', 'security', 
+      'database', 'blockchain', 'iot', 'gamedev', 'qa'
+    ])
+    .withMessage('Invalid domain selected'),
   body('difficulty')
     .optional()
     .isIn(['easy', 'medium', 'hard'])
@@ -81,4 +85,26 @@ const getJob = async (req, res) => {
   }
 };
 
-module.exports = { createJob, getJobs, getJob };
+// @desc    Delete a job
+// @route   DELETE /api/jobs/:id
+const deleteJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    // Check ownership (only creator or admin can delete)
+    if (job.createdBy.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Not authorized to delete this job' });
+    }
+
+    await job.deleteOne();
+    res.json({ message: 'Job removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error deleting job' });
+  }
+};
+
+module.exports = { createJob, getJobs, getJob, deleteJob };

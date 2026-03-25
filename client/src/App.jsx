@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import useAuthStore from './store/authStore';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import NikoChatbot from './components/NikoChatbot';
 
 import HomePage from './pages/home/HomePage';
 
@@ -15,6 +16,7 @@ import JobList from './pages/candidate/JobList';
 import YourInterviews from './pages/candidate/YourInterviews';
 import InterviewSession from './pages/candidate/InterviewSession';
 import InterviewResult from './pages/candidate/InterviewResult';
+import LiveInterviewSession from './pages/candidate/LiveInterviewSession';
 
 // Interviewer pages
 import InterviewerDashboard from './pages/interviewer/Dashboard';
@@ -44,6 +46,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-darker text-white">
       {user && !isHomePage && <Navbar />}
+      {user && <NikoChatbot />}
 
       <Routes>
         {/* Public routes */}
@@ -80,6 +83,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['candidate']}>
               <InterviewSession />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/live-interview/:interviewId"
+          element={
+            <ProtectedRoute allowedRoles={['candidate']}>
+              <LiveInterviewSession />
             </ProtectedRoute>
           }
         />

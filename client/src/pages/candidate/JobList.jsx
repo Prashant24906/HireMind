@@ -7,6 +7,19 @@ const domainBadge = {
   webdev: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
   data: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
   general: 'bg-white/5 text-white/70 border border-white/10',
+  mlai: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
+  devops: 'bg-orange-500/10 text-orange-400 border border-orange-500/20',
+  cloud: 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20',
+  frontend: 'bg-pink-500/10 text-pink-400 border border-pink-500/20',
+  backend: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+  fullstack: 'bg-violet-500/10 text-violet-400 border border-violet-500/20',
+  mobile: 'bg-teal-500/10 text-teal-400 border border-teal-500/20',
+  security: 'bg-red-500/10 text-red-500 border border-red-500/20',
+  database: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+  blockchain: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20',
+  iot: 'bg-lime-500/10 text-lime-400 border border-lime-500/20',
+  gamedev: 'bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20',
+  qa: 'bg-rose-500/10 text-rose-400 border border-rose-500/20',
 };
 
 const difficultyBadge = {

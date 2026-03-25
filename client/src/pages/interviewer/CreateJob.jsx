@@ -99,6 +99,19 @@ export default function CreateJob() {
                 <option value="webdev">Web Development</option>
                 <option value="data">Data Science</option>
                 <option value="general">General</option>
+                <option value="mlai">ML/AI Engineering</option>
+                <option value="devops">DevOps & SRE</option>
+                <option value="cloud">Cloud Computing</option>
+                <option value="frontend">Frontend Dev</option>
+                <option value="backend">Backend Dev</option>
+                <option value="fullstack">Full Stack Dev</option>
+                <option value="mobile">Mobile App Dev</option>
+                <option value="security">Cybersecurity</option>
+                <option value="database">Database/SysAdmin</option>
+                <option value="blockchain">Blockchain Dev</option>
+                <option value="iot">IoT</option>
+                <option value="gamedev">Game Development</option>
+                <option value="qa">QA/Testing</option>
               </select>
             </div>
 

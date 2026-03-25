@@ -3,7 +3,7 @@ Enhanced Question Generator for HireMind
 Generates 10 questions: 5 MCQ + 5 Theory with difficulty progression
 """
 
-from groq import Groq
+import Groq from groq 
 import json
 import os
 

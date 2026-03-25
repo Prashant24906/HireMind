@@ -13,7 +13,11 @@ const jobSchema = new mongoose.Schema(
     },
     domain: {
       type: String,
-      enum: ['webdev', 'data', 'general'],
+      enum: [
+        'webdev', 'data', 'general', 'mlai', 'devops', 'cloud', 
+        'frontend', 'backend', 'fullstack', 'mobile', 'security', 
+        'database', 'blockchain', 'iot', 'gamedev', 'qa'
+      ],
       required: [true, 'Domain is required'],
     },
     difficulty: {
