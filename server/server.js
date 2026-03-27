@@ -15,6 +15,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:5173',
+  'https://hiremind-dyil.onrender.com',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
