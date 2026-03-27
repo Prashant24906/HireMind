@@ -8,13 +8,16 @@
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "dev:ai": "cd ai_service && python main.py",
-    "install:all": "cd client && npm install && cd ../server && npm install && cd ../ai_service && pip install -r requirements.txt",
-    "start:server": "cd server && npm start",
-    "start:ai": "cd ai_service && python main.py"
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "cd client && npm install && cd ../server && npm install && cd ../ai_service && pip install -r requirements.txt"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
+  "engines": {
+  "node": "18.x"
+},
   "dependencies": {
     "lucide-react": "^1.6.0"
   }
