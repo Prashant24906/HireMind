@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "HireMind",
+    "logout": "Cerrar sesión",
+    "loading": "Cargando...",
+    "error": "Error",
+    "back": "Atrás",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "open": "Abierto",
+    "closed": "Cerrado",
+    "na": "N/D",
+    "unknownRole": "Rol desconocido",
+    "postedBy": "Publicado por",
+    "unknown": "Desconocido"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "browseJobs": "Ver empleos",
+    "postJob": "Publicar empleo",
+    "adminPanel": "Panel de administración"
+  },
+  "auth": {
+    "signIn": "Inicia sesión en tu cuenta",
+    "createAccount": "Crea tu cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "fullName": "Nombre completo",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Ingresa tu nombre completo",
+    "passwordHint": "Al menos 6 caracteres",
+    "signInBtn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+    "createAccountBtn": "Crear cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "iAmA": "Soy un",
+    "loginFailed": "Error al iniciar sesión. Por favor, inténtalo de nuevo.",
+    "registerFailed": "Error al registrarse. Por favor, inténtalo de nuevo.",
+    "roles": {
+      "candidate": "Candidato",
+      "candidateDesc": "Buscando empleos y entrevistas",
+      "interviewer": "Entrevistador",
+      "interviewerDesc": "Contratando y evaluando talento"
+    }
+  },
+  "candidateDashboard": {
+    "welcome": "Bienvenido de vuelta, {{name}} 👋",
+    "subtitle": "¿Listo para destacar en tu próxima entrevista? Explora roles disponibles y empieza a practicar.",
+    "browseRoles": "Ver roles disponibles",
+    "browseRolesDesc": "Explora posiciones disponibles e inicia entrevistas con IA.",
+    "yourInterviews": "Tus entrevistas",
+    "yourInterviewsDesc": "Rastrea tu progreso en entrevistas y revisa resultados anteriores.",
+    "tips": {
+      "heading": "💡 Consejos para entrevistas",
+      "tip1": "Lee cada pregunta con cuidado y estructura tu respuesta antes de escribir.",
+      "tip2": "Proporciona ejemplos específicos y aplicaciones del mundo real cuando sea posible.",
+      "tip3": "Sé conciso pero completo — la IA evalúa profundidad, claridad y precisión.",
+      "tip4": "No te preocupes por las preguntas de seguimiento — son oportunidades para mejorar tu puntuación."
+    }
+  },
+  "jobList": {
+    "heading": "Posiciones abiertas",
+    "subtitle": "Explora roles disponibles e inicia una entrevista con IA.",
+    "loading": "Cargando empleos...",
+    "noJobs": "No hay posiciones abiertas disponibles en este momento.",
+    "startInterview": "Iniciar entrevista",
+    "starting": "Iniciando...",
+    "failedLoad": "Error al cargar los empleos",
+    "failedStart": "Error al iniciar la entrevista"
+  },
+  "yourInterviews": {
+    "heading": "Tus entrevistas",
+    "subtitle": "Revisa tus entrevistas anteriores y continúa las que están en progreso.",
+    "loading": "Cargando tus entrevistas...",
+    "noInterviews": "Aún no tienes ninguna entrevista.",
+    "failedLoad": "Error al cargar tus entrevistas",
+    "totalScore": "Puntuación total:",
+    "completed": "Completada",
+    "inProgress": "En progreso",
+    "viewResults": "Ver resultados",
+    "resumeInterview": "Continuar entrevista"
+  },
+  "interviewerDashboard": {
+    "heading": "Mis publicaciones de empleo",
+    "subtitle": "Gestiona tus listados de empleos y revisa candidatos.",
+    "loading": "Cargando tus empleos...",
+    "postJob": "+ Publicar empleo",
+    "noJobs": "Aún no has publicado ningún empleo.",
+    "createFirst": "Crear tu primer empleo",
+    "viewResults": "Ver resultados →",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar esta publicación de empleo? Esta acción no se puede deshacer.",
+    "failedLoad": "Error al cargar los empleos",
+    "failedDelete": "Error al eliminar el empleo"
+  },
+  "createJob": {
+    "heading": "Publicar nuevo empleo",
+    "subtitle": "Crea una lista de empleo y los candidatos podrán hacer entrevistas con IA para ella.",
+    "titleLabel": "Título del empleo",
+    "titlePlaceholder": "ej. Desarrollador Full Stack",
+    "descLabel": "Descripción",
+    "descPlaceholder": "Describe el rol, responsabilidades y requisitos...",
+    "domainLabel": "Dominio",
+    "difficultyLabel": "Dificultad",
+    "createBtn": "Crear empleo",
+    "creating": "Creando...",
+    "failedCreate": "Error al crear el empleo",
+    "domains": {
+      "webdev": "Desarrollo Web",
+      "data": "Ciencia de Datos",
+      "general": "General",
+      "mlai": "Ingeniería ML/IA",
+      "devops": "DevOps y SRE",
+      "cloud": "Computación en la Nube",
+      "frontend": "Desarrollo Frontend",
+      "backend": "Desarrollo Backend",
+      "fullstack": "Desarrollo Full Stack",
+      "mobile": "Desarrollo de Apps Móviles",
+      "security": "Ciberseguridad",
+      "database": "Base de Datos/SysAdmin",
+      "blockchain": "Desarrollo Blockchain",
+      "iot": "IoT",
+      "gamedev": "Desarrollo de Videojuegos",
+      "qa": "QA/Pruebas"
+    },
+    "difficulties": {
+      "easy": "Fácil",
+      "medium": "Medio",
+      "hard": "Difícil"
+    }
+  },
+  "interviewResult": {
+    "heading": "Resultados de la entrevista",
+    "loading": "Cargando resultados...",
+    "failedLoad": "Error al cargar los resultados",
+    "overallScore": "Puntuación general",
+    "pending": "Pendiente",
+    "inProgress": "Esta entrevista aún está en progreso.",
+    "questionBreakdown": "Desglose de preguntas",
+    "yourAnswer": "Tu respuesta",
+    "noAnswer": "No se proporcionó respuesta",
+    "aiFeedback": "Comentarios de IA:",
+    "browseMore": "Ver más empleos",
+    "goToDashboard": "Ir al panel",
+    "performance": {
+      "excellent": "Excelente",
+      "good": "Bueno",
+      "average": "Promedio",
+      "belowAverage": "Por debajo del promedio",
+      "needsImprovement": "Necesita mejora"
+    },
+    "breakdown": {
+      "accuracy": "Precisión",
+      "depth": "Profundidad",
+      "clarity": "Claridad",
+      "application": "Aplicación",
+      "critical": "Pensamiento crítico"
+    }
+  },
+  "jobResults": {
+    "heading": "Resultados de candidatos",
+    "loading": "Cargando resultados...",
+    "failedLoad": "Error al cargar los resultados",
+    "backToDashboard": "Volver al panel",
+    "completedInterviews_one": "{{count}} entrevista completada",
+    "completedInterviews_other": "{{count}} entrevistas completadas",
+    "noCandidates": "Ningún candidato ha completado entrevistas para este empleo todavía.",
+    "rank": "Rango",
+    "name": "Nombre",
+    "email": "Correo",
+    "score": "Puntuación",
+    "action": "Acción",
+    "viewDetails": "Ver detalles"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "hi": "हिंदी",
+    "es": "Español",
+    "fr": "Français"
+  }
+}

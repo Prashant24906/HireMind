@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 
@@ -34,6 +35,7 @@ export default function JobList() {
   const [error, setError] = useState('');
   const [starting, setStarting] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -41,13 +43,13 @@ export default function JobList() {
         const { data } = await api.get('/jobs');
         setJobs(data.jobs);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load jobs');
+        setError(err.response?.data?.message || t('jobList.failedLoad'));
       } finally {
         setLoading(false);
       }
     };
     fetchJobs();
-  }, []);
+  }, [t]);
 
   const handleStartInterview = async (jobId) => {
     setStarting(jobId);
@@ -55,19 +57,19 @@ export default function JobList() {
       const { data } = await api.post('/interview/start', { jobId });
       navigate(`/interview/${data.interviewId}`);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to start interview');
+      setError(err.response?.data?.message || t('jobList.failedStart'));
       setStarting(null);
     }
   };
 
-  if (loading) return <Spinner text="Loading jobs..." />;
+  if (loading) return <Spinner text={t('jobList.loading')} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
       <div className="mb-10">
-        <h1 className="text-3xl font-medium text-white tracking-tight">Open Positions</h1>
+        <h1 className="text-3xl font-medium text-white tracking-tight">{t('jobList.heading')}</h1>
         <p className="mt-2 text-textSoft text-lg">
-          Browse available roles and start an AI-powered interview.
+          {t('jobList.subtitle')}
         </p>
       </div>
 
@@ -82,7 +84,7 @@ export default function JobList() {
           <svg className="mx-auto h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <p className="mt-4 text-textSoft">No open positions available right now.</p>
+          <p className="mt-4 text-textSoft">{t('jobList.noJobs')}</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -95,18 +97,18 @@ export default function JobList() {
                 <div className="flex flex-wrap items-center gap-3 mb-3">
                   <h2 className="text-xl font-medium text-white group-hover:text-brand transition-colors">{job.title}</h2>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${domainBadge[job.domain]}`}>
-                    {job.domain}
+                    {t(`createJob.domains.${job.domain}`) || job.domain}
                   </span>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${difficultyBadge[job.difficulty]}`}>
-                    {job.difficulty}
+                    {t(`createJob.difficulties.${job.difficulty}`) || job.difficulty}
                   </span>
                 </div>
                 <p className="text-sm text-textSoft mb-4 line-clamp-2 leading-relaxed">{job.description}</p>
                 <div className="flex items-center gap-2 text-xs text-white/40">
                   <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center">
-                    {(job.createdBy?.name || 'U').charAt(0)}
+                    {(job.createdBy?.name || t('common.unknown')).charAt(0)}
                   </div>
-                  <span>Posted by {job.createdBy?.name || 'Unknown'}</span>
+                  <span>{t('common.postedBy')} {job.createdBy?.name || t('common.unknown')}</span>
                 </div>
               </div>
               <button
@@ -114,7 +116,7 @@ export default function JobList() {
                 disabled={starting === job._id}
                 className="shrink-0 w-full md:w-auto bg-white/10 hover:bg-brand hover:text-darker text-white text-sm font-medium px-6 py-3 rounded-xl transition-all disabled:opacity-50"
               >
-                {starting === job._id ? 'Starting...' : 'Start Interview'}
+                {starting === job._id ? t('jobList.starting') : t('jobList.startInterview')}
               </button>
             </div>
           ))}

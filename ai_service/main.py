@@ -15,6 +15,7 @@ import os
 load_dotenv()
 
 from scorer import ScoringService  # noqa: E402
+from question_generator import QuestionGenerator  # noqa: E402
 
 # ──────────────────────────────────────────────
 #  App & middleware
@@ -35,6 +36,7 @@ app.add_middleware(
 )
 
 scorer = ScoringService()
+question_generator = QuestionGenerator()
 
 # ──────────────────────────────────────────────
 #  Pydantic models
@@ -72,6 +74,18 @@ class FollowUpResponse(BaseModel):
     followUp: str
 
 
+class GenerateQuestionsRequest(BaseModel):
+    job_title: str
+    domain: str = "general"
+    skills: list[str] = []
+    description: str = ""
+    difficulty: str = "medium"
+
+
+class GenerateQuestionsResponse(BaseModel):
+    questions: list[dict]
+
+
 # ──────────────────────────────────────────────
 #  Endpoints
 # ──────────────────────────────────────────────
@@ -107,6 +121,19 @@ async def generate_followup(req: FollowUpRequest):
         score=req.score,
     )
     return FollowUpResponse(followUp=followup_text)
+
+
+@app.post("/generate-questions", response_model=GenerateQuestionsResponse)
+async def generate_questions(req: GenerateQuestionsRequest):
+    """Generate role-specific interview questions for a job posting."""
+    result = await question_generator.generate_questions(
+        job_title=req.job_title,
+        domain=req.domain,
+        skills=req.skills,
+        description=req.description,
+        difficulty=req.difficulty,
+    )
+    return GenerateQuestionsResponse(questions=result["questions"])
 
 
 # ──────────────────────────────────────────────

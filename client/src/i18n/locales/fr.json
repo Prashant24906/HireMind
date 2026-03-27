@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "HireMind",
+    "logout": "Se déconnecter",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "back": "Retour",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "open": "Ouvert",
+    "closed": "Fermé",
+    "na": "N/A",
+    "unknownRole": "Rôle inconnu",
+    "postedBy": "Publié par",
+    "unknown": "Inconnu"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "browseJobs": "Parcourir les offres",
+    "postJob": "Publier une offre",
+    "adminPanel": "Panneau d'administration"
+  },
+  "auth": {
+    "signIn": "Connectez-vous à votre compte",
+    "createAccount": "Créez votre compte",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "fullName": "Nom complet",
+    "emailPlaceholder": "vous@exemple.com",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Entrez votre nom complet",
+    "passwordHint": "Au moins 6 caractères",
+    "signInBtn": "Se connecter",
+    "signingIn": "Connexion en cours...",
+    "createAccountBtn": "Créer un compte",
+    "creatingAccount": "Création du compte...",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUp": "S'inscrire",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "iAmA": "Je suis un",
+    "loginFailed": "Échec de la connexion. Veuillez réessayer.",
+    "registerFailed": "Échec de l'inscription. Veuillez réessayer.",
+    "roles": {
+      "candidate": "Candidat",
+      "candidateDesc": "Cherche des emplois et des entretiens",
+      "interviewer": "Recruteur",
+      "interviewerDesc": "Recrute et évalue les talents"
+    }
+  },
+  "candidateDashboard": {
+    "welcome": "Bon retour, {{name}} 👋",
+    "subtitle": "Prêt à réussir votre prochain entretien ? Parcourez les offres ouvertes et commencez à vous entraîner.",
+    "browseRoles": "Parcourir les postes ouverts",
+    "browseRolesDesc": "Explorez les postes disponibles et démarrez des entretiens propulsés par l'IA.",
+    "yourInterviews": "Vos entretiens",
+    "yourInterviewsDesc": "Suivez votre progression dans les entretiens et consultez vos résultats passés.",
+    "tips": {
+      "heading": "💡 Conseils pour les entretiens",
+      "tip1": "Lisez chaque question attentivement et structurez votre réponse avant de taper.",
+      "tip2": "Fournissez des exemples spécifiques et des applications concrètes dans la mesure du possible.",
+      "tip3": "Soyez concis mais complet — l'IA évalue la profondeur, la clarté et la précision.",
+      "tip4": "Ne vous inquiétez pas des questions de suivi — ce sont des opportunités d'améliorer votre score."
+    }
+  },
+  "jobList": {
+    "heading": "Postes ouverts",
+    "subtitle": "Parcourez les rôles disponibles et démarrez un entretien propulsé par l'IA.",
+    "loading": "Chargement des offres...",
+    "noJobs": "Aucun poste ouvert disponible pour le moment.",
+    "startInterview": "Démarrer l'entretien",
+    "starting": "Démarrage...",
+    "failedLoad": "Échec du chargement des offres",
+    "failedStart": "Échec du démarrage de l'entretien"
+  },
+  "yourInterviews": {
+    "heading": "Vos entretiens",
+    "subtitle": "Consultez vos entretiens passés et continuez ceux en cours.",
+    "loading": "Chargement de vos entretiens...",
+    "noInterviews": "Vous n'avez pas encore d'entretiens.",
+    "failedLoad": "Échec du chargement de vos entretiens",
+    "totalScore": "Score total :",
+    "completed": "Terminé",
+    "inProgress": "En cours",
+    "viewResults": "Voir les résultats",
+    "resumeInterview": "Reprendre l'entretien"
+  },
+  "interviewerDashboard": {
+    "heading": "Mes offres d'emploi",
+    "subtitle": "Gérez vos offres d'emploi et examinez les candidats.",
+    "loading": "Chargement de vos offres...",
+    "postJob": "+ Publier une offre",
+    "noJobs": "Vous n'avez pas encore publié d'offres.",
+    "createFirst": "Créer votre première offre",
+    "viewResults": "Voir les résultats →",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette offre d'emploi ? Cette action est irréversible.",
+    "failedLoad": "Échec du chargement des offres",
+    "failedDelete": "Échec de la suppression de l'offre"
+  },
+  "createJob": {
+    "heading": "Publier une nouvelle offre",
+    "subtitle": "Créez une offre d'emploi et les candidats pourront passer des entretiens IA pour elle.",
+    "titleLabel": "Titre du poste",
+    "titlePlaceholder": "ex. Développeur Full Stack",
+    "descLabel": "Description",
+    "descPlaceholder": "Décrivez le rôle, les responsabilités et les exigences...",
+    "domainLabel": "Domaine",
+    "difficultyLabel": "Difficulté",
+    "createBtn": "Créer l'offre",
+    "creating": "Création...",
+    "failedCreate": "Échec de la création de l'offre",
+    "domains": {
+      "webdev": "Développement Web",
+      "data": "Science des données",
+      "general": "Général",
+      "mlai": "Ingénierie ML/IA",
+      "devops": "DevOps et SRE",
+      "cloud": "Informatique en nuage",
+      "frontend": "Développement Frontend",
+      "backend": "Développement Backend",
+      "fullstack": "Développement Full Stack",
+      "mobile": "Développement d'apps mobiles",
+      "security": "Cybersécurité",
+      "database": "Base de données/SysAdmin",
+      "blockchain": "Développement Blockchain",
+      "iot": "IoT",
+      "gamedev": "Développement de jeux",
+      "qa": "QA/Test"
+    },
+    "difficulties": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    }
+  },
+  "interviewResult": {
+    "heading": "Résultats de l'entretien",
+    "loading": "Chargement des résultats...",
+    "failedLoad": "Échec du chargement des résultats",
+    "overallScore": "Score global",
+    "pending": "En attente",
+    "inProgress": "Cet entretien est toujours en cours.",
+    "questionBreakdown": "Détail des questions",
+    "yourAnswer": "Votre réponse",
+    "noAnswer": "Aucune réponse fournie",
+    "aiFeedback": "Retour IA :",
+    "browseMore": "Voir plus d'offres",
+    "goToDashboard": "Aller au tableau de bord",
+    "performance": {
+      "excellent": "Excellent",
+      "good": "Bon",
+      "average": "Moyen",
+      "belowAverage": "En dessous de la moyenne",
+      "needsImprovement": "À améliorer"
+    },
+    "breakdown": {
+      "accuracy": "Précision",
+      "depth": "Profondeur",
+      "clarity": "Clarté",
+      "application": "Application",
+      "critical": "Pensée critique"
+    }
+  },
+  "jobResults": {
+    "heading": "Résultats des candidats",
+    "loading": "Chargement des résultats...",
+    "failedLoad": "Échec du chargement des résultats",
+    "backToDashboard": "Retour au tableau de bord",
+    "completedInterviews_one": "{{count}} entretien terminé",
+    "completedInterviews_other": "{{count}} entretiens terminés",
+    "noCandidates": "Aucun candidat n'a encore terminé d'entretien pour ce poste.",
+    "rank": "Rang",
+    "name": "Nom",
+    "email": "E-mail",
+    "score": "Score",
+    "action": "Action",
+    "viewDetails": "Voir les détails"
+  },
+  "language": {
+    "label": "Langue",
+    "en": "English",
+    "hi": "हिंदी",
+    "es": "Español",
+    "fr": "Français"
+  }
+}

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import useAuthStore from '../store/authStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 const dashboardByRole = {
   candidate: '/dashboard',
@@ -15,6 +17,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login, user } = useAuthStore();
+  const { t } = useTranslation();
 
   if (user) {
     return <Navigate to={dashboardByRole[user.role] || '/dashboard'} replace />;
@@ -34,15 +37,15 @@ export default function Register() {
       login(data.user, data.token);
       navigate(dashboardByRole[data.user.role] || '/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.message || t('auth.registerFailed'));
     } finally {
       setLoading(false);
     }
   };
 
   const roles = [
-    { value: 'candidate', label: 'Candidate', desc: 'Looking for jobs & interviews' },
-    { value: 'interviewer', label: 'Interviewer', desc: 'Hiring & evaluating talent' },
+    { value: 'candidate', label: t('auth.roles.candidate'), desc: t('auth.roles.candidateDesc') },
+    { value: 'interviewer', label: t('auth.roles.interviewer'), desc: t('auth.roles.interviewerDesc') },
   ];
 
   return (
@@ -50,6 +53,11 @@ export default function Register() {
       {/* Background Effects */}
       <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-brand/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/3 left-1/4 w-[300px] h-[300px] bg-brand/8 blur-[120px] rounded-full pointer-events-none" />
+
+      {/* Language switcher top-right */}
+      <div className="absolute top-5 right-5 z-20">
+        <LanguageSwitcher />
+      </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
@@ -59,7 +67,7 @@ export default function Register() {
               HireMind
             </h1>
           </Link>
-          <p className="mt-3 text-textSoft">Create your account</p>
+          <p className="mt-3 text-textSoft">{t('auth.createAccount')}</p>
         </div>
 
         {/* Card */}
@@ -76,7 +84,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="reg-name" className="block text-sm font-medium text-textSoft mb-2">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <input
                 id="reg-name"
@@ -86,13 +94,13 @@ export default function Register() {
                 onChange={handleChange}
                 required
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="Enter your full name"
+                placeholder={t('auth.namePlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="reg-email" className="block text-sm font-medium text-textSoft mb-2">
-                Email
+                {t('auth.email')}
               </label>
               <input
                 id="reg-email"
@@ -102,13 +110,13 @@ export default function Register() {
                 onChange={handleChange}
                 required
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="reg-password" className="block text-sm font-medium text-textSoft mb-2">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="reg-password"
@@ -119,13 +127,13 @@ export default function Register() {
                 required
                 minLength={6}
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="At least 6 characters"
+                placeholder={t('auth.passwordHint')}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-textSoft mb-3">
-                I am a
+                {t('auth.iAmA')}
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {roles.map((r) => (
@@ -157,16 +165,16 @@ export default function Register() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                   </svg>
-                  Creating account...
+                  {t('auth.creatingAccount')}
                 </span>
-              ) : 'Create Account'}
+              ) : t('auth.createAccountBtn')}
             </button>
           </form>
 
           <p className="mt-8 text-center text-sm text-textSoft">
-            Already have an account?{' '}
+            {t('auth.haveAccount')}{' '}
             <Link to="/login" className="text-brand font-medium hover:underline">
-              Sign in
+              {t('auth.signInBtn')}
             </Link>
           </p>
         </div>

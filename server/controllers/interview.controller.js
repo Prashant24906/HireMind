@@ -92,25 +92,28 @@ const startInterview = [
         return res.json({ interviewId: existing._id, questions });
       }
 
-      // ATTEMPT AI QUESTION GENERATION (from the new ml service)
+      // ATTEMPT AI QUESTION GENERATION — pass full job context for role-specific questions
       let picked = [];
       try {
         const aiResponse = await axios.post(
           `${process.env.AI_SERVICE_URL}/generate-questions`,
           {
             job_title: job.title,
-            skills: [], // Can be extracted from description if needed
+            domain: job.domain || 'general',
+            skills: [],               // future: extract from job.description
+            description: job.description || '',
             difficulty: job.difficulty || 'medium',
           },
-          { timeout: 15000 }
+          { timeout: 20000 }
         );
         
-        // Extract full question objects returned (MCQ+Theory)
+        // Extract full question objects returned (MCQ + Theory)
         if (aiResponse.data.questions && aiResponse.data.questions.length > 0) {
           picked = aiResponse.data.questions;
+          console.log(`[Interview] AI generated ${picked.length} questions for "${job.title}" (${job.domain})`);
         }
       } catch (aiError) {
-        console.warn('AI Question generation failed, falling back to bank:', aiError.message);
+        console.warn('[Interview] AI question generation failed, falling back to bank:', aiError.message);
       }
 
       // Fallback to internal bank if AI fails or returns empty

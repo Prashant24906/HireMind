@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 import ScoreBar from '../../components/ScoreBar';
@@ -10,6 +11,7 @@ export default function InterviewResult() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [expandedQ, setExpandedQ] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -17,15 +19,15 @@ export default function InterviewResult() {
         const { data } = await api.get(`/results/${interviewId}`);
         setResult(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load results');
+        setError(err.response?.data?.message || t('interviewResult.failedLoad'));
       } finally {
         setLoading(false);
       }
     };
     fetchResult();
-  }, [interviewId]);
+  }, [interviewId, t]);
 
-  if (loading) return <Spinner text="Loading results..." />;
+  if (loading) return <Spinner text={t('interviewResult.loading')} />;
 
   if (error) {
     return (
@@ -43,41 +45,41 @@ export default function InterviewResult() {
                : 'bg-red-500/5 border-red-500/20';
 
   const performanceLabel =
-    result.totalScore >= 8 ? 'Excellent'
-      : result.totalScore >= 7 ? 'Good'
-      : result.totalScore >= 5 ? 'Average'
-      : result.totalScore >= 3 ? 'Below Average'
-      : 'Needs Improvement';
+    result.totalScore >= 8 ? t('interviewResult.performance.excellent')
+      : result.totalScore >= 7 ? t('interviewResult.performance.good')
+      : result.totalScore >= 5 ? t('interviewResult.performance.average')
+      : result.totalScore >= 3 ? t('interviewResult.performance.belowAverage')
+      : t('interviewResult.performance.needsImprovement');
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
       <div className="mb-10 text-center">
-        <h1 className="text-3xl font-medium text-white tracking-tight">Interview Results</h1>
+        <h1 className="text-3xl font-medium text-white tracking-tight">{t('interviewResult.heading')}</h1>
         <p className="mt-2 text-textSoft text-lg">{result.jobTitle}</p>
       </div>
 
       {/* Total score card */}
       <div className={`border rounded-2xl p-10 mb-12 text-center transition-all ${scoreBg}`}>
         <p className="text-sm font-mono text-textSoft uppercase tracking-widest mb-4">
-          Overall Score
+          {t('interviewResult.overallScore')}
         </p>
         <p className={`text-7xl font-semibold tracking-tight ${scoreColor}`}>
-          {result.totalScore !== null ? result.totalScore : 'N/A'}
+          {result.totalScore !== null ? result.totalScore : t('common.na')}
           <span className="text-3xl text-white/30 font-medium">/10</span>
         </p>
         <p className={`mt-4 text-xl font-medium ${scoreColor}`}>
-          {result.totalScore !== null ? performanceLabel : 'Pending'}
+          {result.totalScore !== null ? performanceLabel : t('interviewResult.pending')}
         </p>
         {result.status === 'in_progress' && (
           <p className="mt-4 text-sm font-medium px-4 py-2 bg-yellow-500/10 text-yellow-400 rounded-full inline-block">
-            This interview is still in progress.
+            {t('interviewResult.inProgress')}
           </p>
         )}
       </div>
 
       {/* Per-question results */}
       <div className="space-y-6 mb-12">
-        <h2 className="text-xl font-medium text-white mb-6">Question Breakdown</h2>
+        <h2 className="text-xl font-medium text-white mb-6">{t('interviewResult.questionBreakdown')}</h2>
 
         {result.questions.map((q, idx) => (
           <div
@@ -104,7 +106,7 @@ export default function InterviewResult() {
                       : 'text-textSoft'
                   }`}
                 >
-                  {q.score !== null ? `${q.score}/10` : 'N/A'}
+                  {q.score !== null ? `${q.score}/10` : t('common.na')}
                 </span>
                 <svg
                   className={`w-5 h-5 text-white/40 transition-transform ${
@@ -124,21 +126,21 @@ export default function InterviewResult() {
                 {/* User answer */}
                 <div className="bg-dark/50 rounded-xl p-5 border border-white/5">
                   <p className="text-xs font-mono text-textSoft uppercase tracking-wider mb-3">
-                    Your Answer
+                    {t('interviewResult.yourAnswer')}
                   </p>
                   <p className="text-sm text-white/90 leading-relaxed whitespace-pre-wrap">
-                    {q.answer || 'No answer provided'}
+                    {q.answer || t('interviewResult.noAnswer')}
                   </p>
                 </div>
 
                 {/* Score breakdown */}
                 {q.breakdown && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <ScoreBar label="Accuracy" score={q.breakdown.accuracy} />
-                    <ScoreBar label="Depth" score={q.breakdown.depth} />
-                    <ScoreBar label="Clarity" score={q.breakdown.clarity} />
-                    <ScoreBar label="Application" score={q.breakdown.application} />
-                    <ScoreBar label="Critical Thinking" score={q.breakdown.critical} />
+                    <ScoreBar label={t('interviewResult.breakdown.accuracy')} score={q.breakdown.accuracy} />
+                    <ScoreBar label={t('interviewResult.breakdown.depth')} score={q.breakdown.depth} />
+                    <ScoreBar label={t('interviewResult.breakdown.clarity')} score={q.breakdown.clarity} />
+                    <ScoreBar label={t('interviewResult.breakdown.application')} score={q.breakdown.application} />
+                    <ScoreBar label={t('interviewResult.breakdown.critical')} score={q.breakdown.critical} />
                   </div>
                 )}
 
@@ -146,7 +148,7 @@ export default function InterviewResult() {
                 {q.reason && (
                   <div className="bg-brand/5 border border-brand/10 rounded-xl p-5">
                     <p className="text-sm text-white/90 leading-relaxed">
-                      <span className="font-semibold text-brand tracking-wide mr-2">AI Feedback:</span>
+                      <span className="font-semibold text-brand tracking-wide mr-2">{t('interviewResult.aiFeedback')}</span>
                       {q.reason}
                     </p>
                   </div>
@@ -163,13 +165,13 @@ export default function InterviewResult() {
           to="/jobs"
           className="bg-brand hover:brightness-110 text-darker font-medium px-8 py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(198,244,50,0.15)] text-center"
         >
-          Browse More Jobs
+          {t('interviewResult.browseMore')}
         </Link>
         <Link
           to="/dashboard"
           className="bg-surface hover:bg-white/5 text-white border border-white/10 font-medium px-8 py-3 rounded-xl transition-all text-center"
         >
-          Go to Dashboard
+          {t('interviewResult.goToDashboard')}
         </Link>
       </div>
     </div>

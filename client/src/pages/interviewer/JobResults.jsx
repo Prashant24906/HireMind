@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 
@@ -9,6 +10,7 @@ export default function JobResults() {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,15 +22,15 @@ export default function JobResults() {
         setJob(jobRes.data.job);
         setCandidates(resultsRes.data.candidates);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load results');
+        setError(err.response?.data?.message || t('jobResults.failedLoad'));
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [jobId]);
+  }, [jobId, t]);
 
-  if (loading) return <Spinner text="Loading results..." />;
+  if (loading) return <Spinner text={t('jobResults.loading')} />;
 
   const scoreColor = (s) =>
     s >= 7 ? 'text-green-400' : s >= 5 ? 'text-yellow-400' : 'text-red-400';
@@ -40,13 +42,16 @@ export default function JobResults() {
           to="/interviewer/dashboard"
           className="text-sm text-brand hover:brightness-110 font-medium inline-flex items-center gap-2 transition-all group"
         >
-          <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Dashboard
+          <span className="group-hover:-translate-x-1 transition-transform">←</span> {t('jobResults.backToDashboard')}
         </Link>
         <h1 className="text-3xl font-medium text-white tracking-tight mt-6">
-          {job?.title} — Candidate Results
+          {job?.title} — {t('jobResults.heading')}
         </h1>
         <p className="mt-2 text-textSoft text-lg">
-          {candidates.length} completed interview{candidates.length !== 1 ? 's' : ''}
+          {candidates.length === 1 
+            ? t('jobResults.completedInterviews_one', { count: candidates.length })
+            : t('jobResults.completedInterviews_other', { count: candidates.length })
+          }
         </p>
       </div>
 
@@ -63,7 +68,7 @@ export default function JobResults() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
           <p className="mt-4 text-textSoft relative z-10">
-            No candidates have completed interviews for this job yet.
+            {t('jobResults.noCandidates')}
           </p>
         </div>
       ) : (
@@ -73,19 +78,19 @@ export default function JobResults() {
               <thead>
                 <tr className="border-b border-white/10 bg-darker/50 backdrop-blur-sm">
                   <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
-                    Rank
+                    {t('jobResults.rank')}
                   </th>
                   <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
-                    Name
+                    {t('jobResults.name')}
                   </th>
                   <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
-                    Email
+                    {t('jobResults.email')}
                   </th>
                   <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider">
-                    Score
+                    {t('jobResults.score')}
                   </th>
                   <th className="px-6 py-4 text-xs font-semibold text-textSoft uppercase tracking-wider text-right">
-                    Action
+                    {t('jobResults.action')}
                   </th>
                 </tr>
               </thead>
@@ -105,7 +110,7 @@ export default function JobResults() {
                     </td>
                     <td className="px-6 py-5">
                       <span className={`text-sm font-bold px-2.5 py-1 rounded-full bg-dark border border-white/5 ${scoreColor(c.totalScore)}`}>
-                        {c.totalScore !== null ? `${c.totalScore}/10` : 'N/A'}
+                        {c.totalScore !== null ? `${c.totalScore}/10` : t('common.na')}
                       </span>
                     </td>
                     <td className="px-6 py-5 text-right">
@@ -113,7 +118,7 @@ export default function JobResults() {
                         to={`/result/${c.interviewId}`}
                         className="text-sm text-brand hover:brightness-110 font-medium px-4 py-2 rounded-lg bg-brand/10 hover:bg-brand/20 transition-all"
                       >
-                        View Details
+                        {t('jobResults.viewDetails')}
                       </Link>
                     </td>
                   </tr>

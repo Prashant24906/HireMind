@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import useAuthStore from '../store/authStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 const dashboardByRole = {
   candidate: '/dashboard',
@@ -16,6 +18,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login, user } = useAuthStore();
+  const { t } = useTranslation();
 
   // Redirect if already logged in
   if (user) {
@@ -32,7 +35,7 @@ export default function Login() {
       login(data.user, data.token);
       navigate(dashboardByRole[data.user.role] || '/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || t('auth.loginFailed'));
     } finally {
       setLoading(false);
     }
@@ -44,6 +47,11 @@ export default function Login() {
       <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-brand/5 blur-[150px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-brand/8 blur-[120px] rounded-full pointer-events-none" />
 
+      {/* Language switcher top-right */}
+      <div className="absolute top-5 right-5 z-20">
+        <LanguageSwitcher />
+      </div>
+
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-10">
@@ -52,7 +60,7 @@ export default function Login() {
               HireMind
             </h1>
           </Link>
-          <p className="mt-3 text-textSoft">Sign in to your account</p>
+          <p className="mt-3 text-textSoft">{t('auth.signIn')}</p>
         </div>
 
         {/* Card */}
@@ -69,7 +77,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="login-email" className="block text-sm font-medium text-textSoft mb-2">
-                Email
+                {t('auth.email')}
               </label>
               <input
                 id="login-email"
@@ -78,13 +86,13 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
               />
             </div>
 
             <div>
               <label htmlFor="login-password" className="block text-sm font-medium text-textSoft mb-2">
-                Password
+                {t('auth.password')}
               </label>
               <input
                 id="login-password"
@@ -93,7 +101,7 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full bg-dark border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:ring-2 focus:ring-brand/50 focus:border-brand/50 outline-none transition-all"
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
               />
             </div>
 
@@ -108,16 +116,16 @@ export default function Login() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                   </svg>
-                  Signing in...
+                  {t('auth.signingIn')}
                 </span>
-              ) : 'Sign In'}
+              ) : t('auth.signInBtn')}
             </button>
           </form>
 
           <p className="mt-8 text-center text-sm text-textSoft">
-            Don't have an account?{' '}
+            {t('auth.noAccount')}{' '}
             <Link to="/register" className="text-brand font-medium hover:underline">
-              Sign up
+              {t('auth.signUp')}
             </Link>
           </p>
         </div>

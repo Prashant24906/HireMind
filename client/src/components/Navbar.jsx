@@ -1,29 +1,32 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuthStore from '../store/authStore';
-
-const roleLinks = {
-  candidate: [
-    { to: '/dashboard', label: 'Dashboard' },
-    { to: '/jobs', label: 'Browse Jobs' },
-  ],
-  interviewer: [
-    { to: '/interviewer/dashboard', label: 'Dashboard' },
-    { to: '/interviewer/create-job', label: 'Post a Job' },
-  ],
-  admin: [{ to: '/admin', label: 'Admin Panel' }],
-};
-
-const roleBadgeColors = {
-  candidate: 'bg-brand/10 text-brand border border-brand/20',
-  interviewer: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
-  admin: 'bg-red-500/10 text-red-400 border border-red-500/20',
-};
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!user) return null;
+
+  const roleLinks = {
+    candidate: [
+      { to: '/dashboard', label: t('nav.dashboard') },
+      { to: '/jobs', label: t('nav.browseJobs') },
+    ],
+    interviewer: [
+      { to: '/interviewer/dashboard', label: t('nav.dashboard') },
+      { to: '/interviewer/create-job', label: t('nav.postJob') },
+    ],
+    admin: [{ to: '/admin', label: t('nav.adminPanel') }],
+  };
+
+  const roleBadgeColors = {
+    candidate: 'bg-brand/10 text-brand border border-brand/20',
+    interviewer: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
+    admin: 'bg-red-500/10 text-red-400 border border-red-500/20',
+  };
 
   const links = roleLinks[user.role] || [];
 
@@ -38,11 +41,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Left: Brand + Nav Links */}
           <div className="flex items-center gap-12">
-            <Link
-              to="/"
-              className="text-xl font-medium tracking-tight text-white hover:text-brand transition-colors"
-            >
-              HireMind
+            <Link to="/" className="group flex items-center transition-all">
+              <span className="text-xl font-bold text-white tracking-tight">HireMind</span>
             </Link>
             <div className="hidden sm:flex items-center gap-6">
               {links.map((link) => (
@@ -57,23 +57,22 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Right: User info + Logout */}
-          <div className="flex items-center gap-4">
+          {/* Right: Language + User info + Logout */}
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             <span className="text-sm font-medium text-white hidden sm:block">
               {user.name}
             </span>
             <span
-              className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                roleBadgeColors[user.role]
-              }`}
+              className={`text-xs font-semibold px-2.5 py-1 rounded-full ${roleBadgeColors[user.role]}`}
             >
               {user.role}
             </span>
             <button
               onClick={handleLogout}
-              className="ml-2 px-4 py-2 text-sm font-medium text-textSoft hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+              className="ml-1 px-4 py-2 text-sm font-medium text-textSoft hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
             >
-              Logout
+              {t('common.logout')}
             </button>
           </div>
         </div>

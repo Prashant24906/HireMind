@@ -1,11 +1,12 @@
 """
 Enhanced Question Generator for HireMind
-Generates 10 questions: 5 MCQ + 5 Theory with difficulty progression
+Generates 10 questions: 5 MCQ + 5 Theory with difficulty progression.
+Questions are tightly scoped to the job title, domain, and description.
 """
 
-import Groq from groq 
 import json
 import os
+from groq import Groq
 
 
 class QuestionGenerator:
@@ -13,164 +14,223 @@ class QuestionGenerator:
         self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
         self.model = "llama-3.1-8b-instant"
 
-    async def generate_questions(self, job_title: str, skills: list[str], difficulty: str = "medium"):
-        """
-        Generate 10 interview questions for a specific job role
-        
-        Args:
-            job_title: Position title (e.g., "ML Engineer")
-            skills: List of required skills (e.g., ["Python", "TensorFlow"])
-            difficulty: "easy", "medium", or "hard"
-        
-        Returns:
-            JSON with 10 questions (5 MCQ + 5 Theory)
-        """
-        
-        skills_str = ", ".join(skills) if skills else "general technical skills"
-        
-        prompt = f"""Generate exactly 10 interview questions for a {job_title} position.
-Required skills: {skills_str}
-Difficulty level: {difficulty}
+    def _build_prompt(self, job_title: str, domain: str, skills: list, description: str, difficulty: str) -> str:
+        skills_str = ", ".join(skills) if skills else "not specified"
+        desc_snippet = description[:600].strip() if description else ""
 
-Return ONLY valid JSON (no markdown, no extra text):
+        context_block = f"Job Title: {job_title}\nDomain: {domain}\nDifficulty: {difficulty}\n"
+        if skills_str != "not specified":
+            context_block += f"Required Skills: {skills_str}\n"
+        if desc_snippet:
+            context_block += f"Job Description (excerpt): {desc_snippet}\n"
+
+        return f"""You are a senior technical interviewer. Generate exactly 10 interview questions for the following role.
+
+{context_block}
+
+STRICT RULES:
+1. ALL questions MUST be directly relevant to the "{job_title}" role and the "{domain}" domain.
+2. Do NOT generate generic questions about soft skills, teamwork, or learning habits.
+3. Questions 1-5 MUST be MCQ (type="mcq") with 4 options labeled A), B), C), D).
+4. Questions 6-10 MUST be open-ended theory questions (type="theory").
+5. MCQ questions must test technical knowledge specific to {job_title} (tools, algorithms, concepts, syntax, architecture).
+6. Theory questions should require detailed explanations of concepts, trade-offs, or design decisions relevant to {job_title}.
+7. Difficulty distribution: 2 easy (q1,q6), 5 medium (q2,q3,q7,q8,q9), 3 hard (q4,q5,q10).
+8. Return ONLY valid JSON — no markdown, no extra text, no backticks.
+
+JSON format:
 {{
   "questions": [
     {{
       "id": 1,
       "type": "mcq",
-      "question": "Question text here?",
-      "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+      "question": "<specific technical question for {job_title}>",
+      "options": ["A) ...", "B) ...", "C) ...", "D) ..."],
       "correct_answer": "A",
       "difficulty": "easy"
     }},
     {{
       "id": 6,
       "type": "theory",
-      "question": "Explain [concept]. Give a detailed answer.",
+      "question": "<specific open-ended question for {job_title}>",
       "expected_keywords": ["keyword1", "keyword2", "keyword3"],
-      "difficulty": "medium"
+      "difficulty": "easy"
     }}
   ]
 }}
 
-REQUIREMENTS:
-- Questions 1-5 MUST be MCQ type with 4 options each
-- Questions 6-10 MUST be theory type with expected_keywords list
-- Include 2 easy, 5 medium, 3 hard questions distributed throughout
-- Questions should test conceptual understanding, practical application, and problem-solving
-- Mix theory, coding concepts, system design, and best practices
-- Make theory questions open-ended and requiring detailed explanations
-- Each MCQ must have exactly one correct answer
-- expected_keywords should be 3-5 key terms that should appear in a good answer
+Return ONLY the JSON object, nothing else."""
 
-Return ONLY the JSON, nothing else."""
+    async def generate_questions(
+        self,
+        job_title: str,
+        domain: str = "general",
+        skills: list = None,
+        description: str = "",
+        difficulty: str = "medium",
+    ):
+        """
+        Generate 10 role-specific interview questions (5 MCQ + 5 Theory).
+
+        Args:
+            job_title:   Position title  (e.g. "ML Engineer")
+            domain:      Job domain      (e.g. "mlai", "webdev")
+            skills:      Required skills (e.g. ["Python", "TensorFlow"])
+            description: Job description text for context extraction
+            difficulty:  "easy" | "medium" | "hard"
+
+        Returns:
+            dict with key "questions" containing a list of question objects
+        """
+        if skills is None:
+            skills = []
+
+        prompt = self._build_prompt(job_title, domain, skills, description, difficulty)
 
         try:
-            message = self.client.messages.create(
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.7,
                 max_tokens=3000,
             )
-            
-            response_text = message.content[0].text.strip()
-            
-            # Try to parse JSON
-            try:
-                # Clean up the response (remove markdown if present)
-                if "```json" in response_text:
-                    response_text = response_text.split("```json")[1].split("```")[0]
-                elif "```" in response_text:
-                    response_text = response_text.split("```")[1].split("```")[0]
-                
-                questions_data = json.loads(response_text)
-                return questions_data
-            except json.JSONDecodeError:
-                # Fallback: return default questions
-                return self._get_fallback_questions(job_title, difficulty)
-                
-        except Exception as e:
-            print(f"Error generating questions: {str(e)}")
-            return self._get_fallback_questions(job_title, difficulty)
 
-    def _get_fallback_questions(self, job_title: str, difficulty: str):
-        """Fallback questions if generation fails"""
+            response_text = response.choices[0].message.content.strip()
+
+            # Strip markdown fences if present
+            if "```json" in response_text:
+                response_text = response_text.split("```json")[1].split("```")[0]
+            elif "```" in response_text:
+                response_text = response_text.split("```")[1].split("```")[0]
+
+            # Isolate the JSON object
+            start = response_text.find("{")
+            end = response_text.rfind("}")
+            if start != -1 and end != -1:
+                response_text = response_text[start : end + 1]
+
+            questions_data = json.loads(response_text)
+
+            # Basic validation
+            if "questions" not in questions_data or not isinstance(questions_data["questions"], list):
+                raise ValueError("Invalid response structure")
+            if len(questions_data["questions"]) == 0:
+                raise ValueError("Empty questions list")
+
+            print(f"[QuestionGenerator] Generated {len(questions_data['questions'])} questions for '{job_title}' ({domain})")
+            return questions_data
+
+        except json.JSONDecodeError as e:
+            print(f"[QuestionGenerator] JSON parse error: {e} — using fallback")
+            return self._get_fallback_questions(job_title, domain, difficulty)
+
+        except Exception as e:
+            print(f"[QuestionGenerator] Error generating questions: {e} — using fallback")
+            return self._get_fallback_questions(job_title, domain, difficulty)
+
+    def _get_fallback_questions(self, job_title: str, domain: str, difficulty: str):
+        """Role-aware fallback questions used when LLM generation fails."""
         return {
             "questions": [
                 {
                     "id": 1,
                     "type": "mcq",
-                    "question": f"Which is a key skill for {job_title}?",
-                    "options": ["A) Problem solving", "B) Creativity", "C) Communication", "D) All of above"],
-                    "correct_answer": "D",
-                    "difficulty": "easy"
+                    "question": f"Which of the following is a core responsibility of a {job_title}?",
+                    "options": [
+                        "A) Managing HR operations",
+                        "B) Designing and implementing domain-specific solutions",
+                        "C) Handling financial audits",
+                        "D) Overseeing legal compliance",
+                    ],
+                    "correct_answer": "B",
+                    "difficulty": "easy",
                 },
                 {
                     "id": 2,
                     "type": "mcq",
-                    "question": "What is important in software development?",
-                    "options": ["A) Code quality", "B) Documentation", "C) Testing", "D) All of above"],
-                    "correct_answer": "D",
-                    "difficulty": "easy"
+                    "question": f"Which approach is most important when debugging issues in a {domain} system?",
+                    "options": [
+                        "A) Rewriting the entire codebase",
+                        "B) Systematic isolation of the failing component and root-cause analysis",
+                        "C) Ignoring edge cases",
+                        "D) Deploying to production without testing",
+                    ],
+                    "correct_answer": "B",
+                    "difficulty": "medium",
                 },
                 {
                     "id": 3,
                     "type": "mcq",
-                    "question": "How do you approach complex problems?",
-                    "options": ["A) Break into smaller parts", "B) Ask for help", "C) Research solutions", "D) All of above"],
-                    "correct_answer": "D",
-                    "difficulty": "medium"
+                    "question": "What is a key benefit of version control in software development?",
+                    "options": [
+                        "A) It eliminates all bugs automatically",
+                        "B) It allows tracking of changes and collaboration across teams",
+                        "C) It replaces documentation entirely",
+                        "D) It speeds up hardware performance",
+                    ],
+                    "correct_answer": "B",
+                    "difficulty": "medium",
                 },
                 {
                     "id": 4,
                     "type": "mcq",
-                    "question": "What does clean code mean?",
-                    "options": ["A) Readable", "B) Maintainable", "C) Efficient", "D) All of above"],
-                    "correct_answer": "D",
-                    "difficulty": "medium"
+                    "question": "Which of the following best describes a microservices architecture?",
+                    "options": [
+                        "A) A single large application handling all concerns",
+                        "B) Multiple small, independently deployable services communicating via APIs",
+                        "C) A monolithic database with replicated services",
+                        "D) A hardware-level design pattern",
+                    ],
+                    "correct_answer": "B",
+                    "difficulty": "hard",
                 },
                 {
                     "id": 5,
                     "type": "mcq",
-                    "question": "Why is version control important?",
-                    "options": ["A) Track changes", "B) Collaboration", "C) History", "D) All of above"],
-                    "correct_answer": "D",
-                    "difficulty": "medium"
+                    "question": "What does 'scalability' mean in the context of system design?",
+                    "options": [
+                        "A) The system can handle increased load without degrading performance",
+                        "B) The system uses the least possible memory",
+                        "C) The system is only accessible by admins",
+                        "D) The system never requires updates",
+                    ],
+                    "correct_answer": "A",
+                    "difficulty": "hard",
                 },
                 {
                     "id": 6,
                     "type": "theory",
-                    "question": f"Explain the key responsibilities of a {job_title}. What skills matter most and why?",
-                    "expected_keywords": ["responsibility", "skill", "technical", "soft skills", "problem solving"],
-                    "difficulty": "medium"
+                    "question": f"Describe the key technical skills required for a {job_title} role and explain how they apply to real-world problems in the {domain} domain.",
+                    "expected_keywords": ["technical", "skills", "domain", "apply", "problem"],
+                    "difficulty": "easy",
                 },
                 {
                     "id": 7,
                     "type": "theory",
-                    "question": "Describe your approach to learning new technologies. Give a real example.",
-                    "expected_keywords": ["documentation", "practice", "project", "feedback", "iterate"],
-                    "difficulty": "medium"
+                    "question": f"Explain how you would design a solution for a complex {domain} problem. Walk through your thought process.",
+                    "expected_keywords": ["design", "requirements", "architecture", "trade-offs", "solution"],
+                    "difficulty": "medium",
                 },
                 {
                     "id": 8,
                     "type": "theory",
-                    "question": "How do you handle challenging situations in team projects?",
-                    "expected_keywords": ["communication", "collaboration", "conflict", "solution", "team"],
-                    "difficulty": "hard"
+                    "question": "How do you ensure code quality and maintainability in your projects? Provide specific examples.",
+                    "expected_keywords": ["testing", "code review", "documentation", "refactoring", "standards"],
+                    "difficulty": "medium",
                 },
                 {
                     "id": 9,
                     "type": "theory",
-                    "question": "What is your biggest strength and how would you apply it to this role?",
-                    "expected_keywords": ["strength", "relevant", "example", "impact", "role"],
-                    "difficulty": "medium"
+                    "question": "Describe a situation where you had to optimize system performance. What metrics did you use and what changes did you make?",
+                    "expected_keywords": ["performance", "metrics", "profiling", "optimization", "bottleneck"],
+                    "difficulty": "medium",
                 },
                 {
                     "id": 10,
                     "type": "theory",
-                    "question": "Describe a technical problem you solved. What was your approach?",
-                    "expected_keywords": ["problem", "analysis", "solution", "result", "learning"],
-                    "difficulty": "hard"
-                }
+                    "question": f"What are the most challenging aspects of working as a {job_title} and how do you overcome them?",
+                    "expected_keywords": ["challenges", "solution", "experience", "approach", "skills"],
+                    "difficulty": "hard",
+                },
             ]
         }

@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "HireMind",
+    "logout": "Logout",
+    "loading": "Loading...",
+    "error": "Error",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "open": "Open",
+    "closed": "Closed",
+    "na": "N/A",
+    "unknownRole": "Unknown Role",
+    "postedBy": "Posted by",
+    "unknown": "Unknown"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "browseJobs": "Browse Jobs",
+    "postJob": "Post a Job",
+    "adminPanel": "Admin Panel"
+  },
+  "auth": {
+    "signIn": "Sign in to your account",
+    "createAccount": "Create your account",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "Enter your full name",
+    "passwordHint": "At least 6 characters",
+    "signInBtn": "Sign In",
+    "signingIn": "Signing in...",
+    "createAccountBtn": "Create Account",
+    "creatingAccount": "Creating account...",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "haveAccount": "Already have an account?",
+    "iAmA": "I am a",
+    "loginFailed": "Login failed. Please try again.",
+    "registerFailed": "Registration failed. Please try again.",
+    "roles": {
+      "candidate": "Candidate",
+      "candidateDesc": "Looking for jobs & interviews",
+      "interviewer": "Interviewer",
+      "interviewerDesc": "Hiring & evaluating talent"
+    }
+  },
+  "candidateDashboard": {
+    "welcome": "Welcome back, {{name}} 👋",
+    "subtitle": "Ready to ace your next interview? Browse open roles and start practicing.",
+    "browseRoles": "Browse Open Roles",
+    "browseRolesDesc": "Explore available positions and start AI-powered interviews.",
+    "yourInterviews": "Your Interviews",
+    "yourInterviewsDesc": "Track your interview progress and review past results.",
+    "tips": {
+      "heading": "💡 Interview Tips",
+      "tip1": "Read each question carefully and structure your answer before typing.",
+      "tip2": "Provide specific examples and real-world applications when possible.",
+      "tip3": "Be concise but thorough — the AI evaluates depth, clarity, and accuracy.",
+      "tip4": "Don't worry about follow-up questions — they're opportunities to improve your score."
+    }
+  },
+  "jobList": {
+    "heading": "Open Positions",
+    "subtitle": "Browse available roles and start an AI-powered interview.",
+    "loading": "Loading jobs...",
+    "noJobs": "No open positions available right now.",
+    "startInterview": "Start Interview",
+    "starting": "Starting...",
+    "failedLoad": "Failed to load jobs",
+    "failedStart": "Failed to start interview"
+  },
+  "yourInterviews": {
+    "heading": "Your Interviews",
+    "subtitle": "Review your past interviews and continue the ones in progress.",
+    "loading": "Loading your interviews...",
+    "noInterviews": "You don't have any interviews yet.",
+    "failedLoad": "Failed to load your interviews",
+    "totalScore": "Total Score:",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "viewResults": "View Results",
+    "resumeInterview": "Resume Interview"
+  },
+  "interviewerDashboard": {
+    "heading": "My Job Postings",
+    "subtitle": "Manage your job listings and review candidates.",
+    "loading": "Loading your jobs...",
+    "postJob": "+ Post a Job",
+    "noJobs": "You haven't posted any jobs yet.",
+    "createFirst": "Create Your First Job",
+    "viewResults": "View Results →",
+    "deleteConfirm": "Are you sure you want to delete this job posting? This action cannot be undone.",
+    "failedLoad": "Failed to load jobs",
+    "failedDelete": "Failed to delete job"
+  },
+  "createJob": {
+    "heading": "Post a New Job",
+    "subtitle": "Create a job listing and candidates will be able to take AI interviews for it.",
+    "titleLabel": "Job Title",
+    "titlePlaceholder": "e.g. Full Stack Developer",
+    "descLabel": "Description",
+    "descPlaceholder": "Describe the role, responsibilities, and requirements...",
+    "domainLabel": "Domain",
+    "difficultyLabel": "Difficulty",
+    "createBtn": "Create Job",
+    "creating": "Creating...",
+    "failedCreate": "Failed to create job",
+    "domains": {
+      "webdev": "Web Development",
+      "data": "Data Science",
+      "general": "General",
+      "mlai": "ML/AI Engineering",
+      "devops": "DevOps & SRE",
+      "cloud": "Cloud Computing",
+      "frontend": "Frontend Dev",
+      "backend": "Backend Dev",
+      "fullstack": "Full Stack Dev",
+      "mobile": "Mobile App Dev",
+      "security": "Cybersecurity",
+      "database": "Database/SysAdmin",
+      "blockchain": "Blockchain Dev",
+      "iot": "IoT",
+      "gamedev": "Game Development",
+      "qa": "QA/Testing"
+    },
+    "difficulties": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "interviewResult": {
+    "heading": "Interview Results",
+    "loading": "Loading results...",
+    "failedLoad": "Failed to load results",
+    "overallScore": "Overall Score",
+    "pending": "Pending",
+    "inProgress": "This interview is still in progress.",
+    "questionBreakdown": "Question Breakdown",
+    "yourAnswer": "Your Answer",
+    "noAnswer": "No answer provided",
+    "aiFeedback": "AI Feedback:",
+    "browseMore": "Browse More Jobs",
+    "goToDashboard": "Go to Dashboard",
+    "performance": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "average": "Average",
+      "belowAverage": "Below Average",
+      "needsImprovement": "Needs Improvement"
+    },
+    "breakdown": {
+      "accuracy": "Accuracy",
+      "depth": "Depth",
+      "clarity": "Clarity",
+      "application": "Application",
+      "critical": "Critical Thinking"
+    }
+  },
+  "jobResults": {
+    "heading": "Candidate Results",
+    "loading": "Loading results...",
+    "failedLoad": "Failed to load results",
+    "backToDashboard": "Back to Dashboard",
+    "completedInterviews_one": "{{count}} completed interview",
+    "completedInterviews_other": "{{count}} completed interviews",
+    "noCandidates": "No candidates have completed interviews for this job yet.",
+    "rank": "Rank",
+    "name": "Name",
+    "email": "Email",
+    "score": "Score",
+    "action": "Action",
+    "viewDetails": "View Details"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "hi": "हिंदी",
+    "es": "Español",
+    "fr": "Français"
+  }
+}

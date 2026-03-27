@@ -1,0 +1,186 @@
+{
+  "common": {
+    "appName": "हायरमाइंड",
+    "logout": "लॉग आउट",
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "back": "वापस",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "open": "खुला",
+    "closed": "बंद",
+    "na": "उपलब्ध नहीं",
+    "unknownRole": "अज्ञात भूमिका",
+    "postedBy": "द्वारा पोस्ट किया गया",
+    "unknown": "अज्ञात"
+  },
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "browseJobs": "नौकरियां देखें",
+    "postJob": "नौकरी पोस्ट करें",
+    "adminPanel": "एडमिन पैनल"
+  },
+  "auth": {
+    "signIn": "अपने खाते में साइन इन करें",
+    "createAccount": "अपना खाता बनाएं",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "fullName": "पूरा नाम",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "namePlaceholder": "अपना पूरा नाम दर्ज करें",
+    "passwordHint": "कम से कम 6 अक्षर",
+    "signInBtn": "साइन इन करें",
+    "signingIn": "साइन इन हो रहा है...",
+    "createAccountBtn": "खाता बनाएं",
+    "creatingAccount": "खाता बनाया जा रहा है...",
+    "noAccount": "खाता नहीं है?",
+    "signUp": "साइन अप करें",
+    "haveAccount": "पहले से खाता है?",
+    "iAmA": "मैं हूं",
+    "loginFailed": "लॉगिन विफल। कृपया पुनः प्रयास करें।",
+    "registerFailed": "पंजीकरण विफल। कृपया पुनः प्रयास करें।",
+    "roles": {
+      "candidate": "उम्मीदवार",
+      "candidateDesc": "नौकरी और इंटरव्यू की तलाश",
+      "interviewer": "इंटरव्यूअर",
+      "interviewerDesc": "प्रतिभा की भर्ती और मूल्यांकन"
+    }
+  },
+  "candidateDashboard": {
+    "welcome": "वापसी पर स्वागत है, {{name}} 👋",
+    "subtitle": "अगले इंटरव्यू के लिए तैयार हैं? खुली भूमिकाएं देखें और अभ्यास शुरू करें।",
+    "browseRoles": "खुली भूमिकाएं देखें",
+    "browseRolesDesc": "उपलब्ध पद देखें और AI-संचालित इंटरव्यू शुरू करें।",
+    "yourInterviews": "आपके इंटरव्यू",
+    "yourInterviewsDesc": "अपनी इंटरव्यू प्रगति ट्रैक करें और पिछले परिणाम देखें।",
+    "tips": {
+      "heading": "💡 इंटरव्यू टिप्स",
+      "tip1": "प्रत्येक प्रश्न को ध्यान से पढ़ें और टाइप करने से पहले उत्तर तैयार करें।",
+      "tip2": "जहां संभव हो विशिष्ट उदाहरण और वास्तविक दुनिया के अनुप्रयोग प्रदान करें।",
+      "tip3": "संक्षिप्त लेकिन गहन रहें — AI गहराई, स्पष्टता और सटीकता का मूल्यांकन करता है।",
+      "tip4": "अनुवर्ती प्रश्नों की चिंता न करें — वे आपके स्कोर को सुधारने के अवसर हैं।"
+    }
+  },
+  "jobList": {
+    "heading": "खुले पद",
+    "subtitle": "उपलब्ध भूमिकाएं देखें और AI-संचालित इंटरव्यू शुरू करें।",
+    "loading": "नौकरियां लोड हो रही हैं...",
+    "noJobs": "अभी कोई खुला पद उपलब्ध नहीं है।",
+    "startInterview": "इंटरव्यू शुरू करें",
+    "starting": "शुरू हो रहा है...",
+    "failedLoad": "नौकरियां लोड करने में विफल",
+    "failedStart": "इंटरव्यू शुरू करने में विफल"
+  },
+  "yourInterviews": {
+    "heading": "आपके इंटरव्यू",
+    "subtitle": "अपने पिछले इंटरव्यू की समीक्षा करें और जारी वाले जारी रखें।",
+    "loading": "आपके इंटरव्यू लोड हो रहे हैं...",
+    "noInterviews": "अभी तक आपके पास कोई इंटरव्यू नहीं है।",
+    "failedLoad": "आपके इंटरव्यू लोड करने में विफल",
+    "totalScore": "कुल स्कोर:",
+    "completed": "पूर्ण",
+    "inProgress": "जारी है",
+    "viewResults": "परिणाम देखें",
+    "resumeInterview": "इंटरव्यू जारी रखें"
+  },
+  "interviewerDashboard": {
+    "heading": "मेरी नौकरी पोस्टिंग",
+    "subtitle": "अपनी नौकरी सूचियां प्रबंधित करें और उम्मीदवारों की समीक्षा करें।",
+    "loading": "आपकी नौकरियां लोड हो रही हैं...",
+    "postJob": "+ नौकरी पोस्ट करें",
+    "noJobs": "आपने अभी तक कोई नौकरी पोस्ट नहीं की है।",
+    "createFirst": "अपनी पहली नौकरी बनाएं",
+    "viewResults": "परिणाम देखें →",
+    "deleteConfirm": "क्या आप वाकई इस नौकरी पोस्टिंग को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।",
+    "failedLoad": "नौकरियां लोड करने में विफल",
+    "failedDelete": "नौकरी हटाने में विफल"
+  },
+  "createJob": {
+    "heading": "नई नौकरी पोस्ट करें",
+    "subtitle": "नौकरी सूची बनाएं और उम्मीदवार इसके लिए AI इंटरव्यू दे सकेंगे।",
+    "titleLabel": "नौकरी का शीर्षक",
+    "titlePlaceholder": "उदा. फुल स्टैक डेवलपर",
+    "descLabel": "विवरण",
+    "descPlaceholder": "भूमिका, जिम्मेदारियां और आवश्यकताएं बताएं...",
+    "domainLabel": "डोमेन",
+    "difficultyLabel": "कठिनाई",
+    "createBtn": "नौकरी बनाएं",
+    "creating": "बनाया जा रहा है...",
+    "failedCreate": "नौकरी बनाने में विफल",
+    "domains": {
+      "webdev": "वेब डेवलपमेंट",
+      "data": "डेटा साइंस",
+      "general": "सामान्य",
+      "mlai": "ML/AI इंजीनियरिंग",
+      "devops": "डेवऑप्स और SRE",
+      "cloud": "क्लाउड कंप्यूटिंग",
+      "frontend": "फ्रंटएंड डेव",
+      "backend": "बैकएंड डेव",
+      "fullstack": "फुल स्टैक डेव",
+      "mobile": "मोबाइल ऐप डेव",
+      "security": "साइबर सुरक्षा",
+      "database": "डेटाबेस/सिस्टम एडमिन",
+      "blockchain": "ब्लॉकचेन डेव",
+      "iot": "IoT",
+      "gamedev": "गेम डेवलपमेंट",
+      "qa": "QA/परीक्षण"
+    },
+    "difficulties": {
+      "easy": "आसान",
+      "medium": "मध्यम",
+      "hard": "कठिन"
+    }
+  },
+  "interviewResult": {
+    "heading": "इंटरव्यू परिणाम",
+    "loading": "परिणाम लोड हो रहे हैं...",
+    "failedLoad": "परिणाम लोड करने में विफल",
+    "overallScore": "कुल स्कोर",
+    "pending": "लंबित",
+    "inProgress": "यह इंटरव्यू अभी भी जारी है।",
+    "questionBreakdown": "प्रश्न विवरण",
+    "yourAnswer": "आपका उत्तर",
+    "noAnswer": "कोई उत्तर नहीं दिया गया",
+    "aiFeedback": "AI प्रतिक्रिया:",
+    "browseMore": "अधिक नौकरियां देखें",
+    "goToDashboard": "डैशबोर्ड पर जाएं",
+    "performance": {
+      "excellent": "उत्कृष्ट",
+      "good": "अच्छा",
+      "average": "औसत",
+      "belowAverage": "औसत से नीचे",
+      "needsImprovement": "सुधार की जरूरत है"
+    },
+    "breakdown": {
+      "accuracy": "सटीकता",
+      "depth": "गहराई",
+      "clarity": "स्पष्टता",
+      "application": "अनुप्रयोग",
+      "critical": "आलोचनात्मक सोच"
+    }
+  },
+  "jobResults": {
+    "heading": "उम्मीदवार परिणाम",
+    "loading": "परिणाम लोड हो रहे हैं...",
+    "failedLoad": "परिणाम लोड करने में विफल",
+    "backToDashboard": "डैशबोर्ड पर वापस",
+    "completedInterviews_one": "{{count}} पूर्ण इंटरव्यू",
+    "completedInterviews_other": "{{count}} पूर्ण इंटरव्यू",
+    "noCandidates": "अभी तक किसी उम्मीदवार ने इस नौकरी के लिए इंटरव्यू पूरा नहीं किया है।",
+    "rank": "रैंक",
+    "name": "नाम",
+    "email": "ईमेल",
+    "score": "स्कोर",
+    "action": "कार्रवाई",
+    "viewDetails": "विवरण देखें"
+  },
+  "language": {
+    "label": "भाषा",
+    "en": "English",
+    "hi": "हिंदी",
+    "es": "Español",
+    "fr": "Français"
+  }
+}

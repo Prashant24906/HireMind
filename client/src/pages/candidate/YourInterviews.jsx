@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import Spinner from '../../components/Spinner';
 
@@ -20,6 +21,7 @@ export default function YourInterviews() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
   
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -27,22 +29,22 @@ export default function YourInterviews() {
         const { data } = await api.get('/interview/my-interviews');
         setInterviews(data.interviews);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load your interviews');
+        setError(err.response?.data?.message || t('yourInterviews.failedLoad'));
       } finally {
         setLoading(false);
       }
     };
     fetchInterviews();
-  }, []);
+  }, [t]);
 
-  if (loading) return <Spinner text="Loading your interviews..." />;
+  if (loading) return <Spinner text={t('yourInterviews.loading')} />;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 animate-fade-in-up">
       <div className="mb-10">
-        <h1 className="text-3xl font-medium text-white tracking-tight">Your Interviews</h1>
+        <h1 className="text-3xl font-medium text-white tracking-tight">{t('yourInterviews.heading')}</h1>
         <p className="mt-2 text-textSoft text-lg">
-          Review your past interviews and continue the ones in progress.
+          {t('yourInterviews.subtitle')}
         </p>
       </div>
 
@@ -57,7 +59,7 @@ export default function YourInterviews() {
           <svg className="mx-auto h-12 w-12 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
-          <p className="mt-4 text-textSoft">You don't have any interviews yet.</p>
+          <p className="mt-4 text-textSoft">{t('yourInterviews.noInterviews')}</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -69,26 +71,26 @@ export default function YourInterviews() {
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
                   <h2 className="text-xl font-medium text-white group-hover:text-brand transition-colors">
-                    {iv.jobId?.title || 'Unknown Role'}
+                    {iv.jobId?.title || t('common.unknownRole')}
                   </h2>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${domainBadge[iv.jobId?.domain] || domainBadge.general}`}>
-                    {iv.jobId?.domain || 'general'}
+                    {t(`createJob.domains.${iv.jobId?.domain}`) || iv.jobId?.domain || 'general'}
                   </span>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${difficultyBadge[iv.jobId?.difficulty] || difficultyBadge.medium}`}>
-                    {iv.jobId?.difficulty || 'medium'}
+                    {t(`createJob.difficulties.${iv.jobId?.difficulty}`) || iv.jobId?.difficulty || 'medium'}
                   </span>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                     iv.status === 'completed'
                       ? 'bg-green-500/10 text-green-400 border border-green-500/20'
                       : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
                   }`}>
-                    {iv.status === 'completed' ? 'Completed' : 'In Progress'}
+                    {iv.status === 'completed' ? t('yourInterviews.completed') : t('yourInterviews.inProgress')}
                   </span>
                 </div>
                 
                 {iv.status === 'completed' && iv.totalScore !== null && (
                    <div className="flex items-center gap-2 text-sm text-white/60">
-                     <span>Total Score:</span>
+                     <span>{t('yourInterviews.totalScore')}</span>
                      <span className="text-lg font-bold text-white">{iv.totalScore}/10</span>
                    </div>
                 )}
@@ -102,7 +104,7 @@ export default function YourInterviews() {
                     : 'bg-white/10 hover:bg-brand hover:text-darker text-white'
                 }`}
               >
-                {iv.status === 'completed' ? 'View Results' : 'Resume Interview'}
+                {iv.status === 'completed' ? t('yourInterviews.viewResults') : t('yourInterviews.resumeInterview')}
               </button>
             </div>
           ))}
