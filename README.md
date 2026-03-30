@@ -54,7 +54,7 @@ Client runs on `http://localhost:5173`.
 
 ```bash
 cd ml-service
-pip install -r requirements.txt
+pip install -r requirements.txt 
 uvicorn main:app --port 8000
 ```
 
